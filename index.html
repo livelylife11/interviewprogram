@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>나의 면접 연습장</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: 수험표처럼 생긴 머리말 + 3개 탭(답변 만들기 · 모의면접 · 면접 꿀팁) + 답변 노트. 질문 목록 | 작업 영역 2단, 폰에서는 1단 */
+:root{
+  --bg:#f3f4f7; --paper:#ffffff; --ink:#1c2340; --muted:#5d6480; --line:#d9dce6; --soft:#e9ebf3;
+  --navy:#24306b; --navy-ink:#ffffff; --accent:#d9862b; --accent-soft:#fbeedd; --ok:#2f7d5b; --ok-soft:#e1f2ea; --warn:#b8452f;
+  --f-display:"Gowun Batang","Noto Serif KR",serif;
+  --f-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12152a; --paper:#1b1f38; --ink:#e8eaf5; --muted:#a3a8c4; --line:#30365a; --soft:#252a4a;
+  --navy:#8e9bf0; --navy-ink:#12152a; --accent:#f0a650; --accent-soft:#3a2e1f; --ok:#6bc79c; --ok-soft:#1d3a2f; --warn:#f08a74; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12152a; --paper:#1b1f38; --ink:#e8eaf5; --muted:#a3a8c4; --line:#30365a; --soft:#252a4a;
+  --navy:#8e9bf0; --navy-ink:#12152a; --accent:#f0a650; --accent-soft:#3a2e1f; --ok:#6bc79c; --ok-soft:#1d3a2f; --warn:#f08a74; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.65;margin:0;word-break:keep-all;overflow-wrap:anywhere}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:20px 56px}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.3}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:16px;top:8px;background:var(--paper);padding:6px 10px;z-index:10}
+
+/* 머리말 */
+.head{display:grid;grid-template-columns:1fr minmax(260px,340px);gap:20px;align-items:stretch}
+.title-block{display:flex;flex-direction:column;justify-content:center;gap:8px;min-width:0}
+.eyebrow{font-size:12.5px;letter-spacing:.08em;color:var(--muted);font-weight:500}
+.title-block h1{font-size:clamp(28px,5vw,40px);font-weight:700}
+.title-block p{margin:0;color:var(--muted);max-width:52ch}
+.ticket{background:var(--paper);border:1.5px solid var(--navy);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px;position:relative}
+.ticket::before{content:"수험표";position:absolute;top:-11px;left:14px;background:var(--bg);padding:0 6px;font-size:12px;letter-spacing:.12em;color:var(--navy);font-weight:700}
+.ticket label{display:grid;grid-template-columns:72px 1fr;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.ticket input{border:0;border-bottom:1px dashed var(--line);background:transparent;padding:4px 2px;min-width:0;color:var(--ink);font-size:15px}
+.ticket input:focus{outline:none;border-bottom-color:var(--accent)}
+.ticket small{color:var(--muted);font-size:12px;line-height:1.5}
+
+.progress{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-block:22px 14px;font-size:14px;color:var(--muted)}
+.progress b{font-family:var(--f-mono);color:var(--ink);font-size:17px}
+.bar{flex:1 1 160px;height:6px;background:var(--soft);border-radius:3px;overflow:hidden;min-width:120px}
+.bar i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+
+/* 탭 */
+.tabs{display:flex;gap:4px;background:var(--soft);padding:4px;border-radius:12px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;overflow-x:auto}
+.tabs button{flex:1 0 auto;border:0;background:transparent;padding:10px 14px;border-radius:9px;font-weight:500;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--paper);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12);font-weight:700}
+.panel{margin-top:18px}
+
+/* 2단 */
+.split{display:grid;grid-template-columns:290px 1fr;gap:18px;align-items:start}
+.split>*{min-width:0}
+.qlist{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:10px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 90px);overflow:auto}
+.filters{display:flex;flex-wrap:wrap;gap:6px;padding:4px 4px 10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 11px;font-size:13px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--navy-ink)}
+.cat-h{font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:700;padding:10px 6px 4px}
+.qbtn{display:grid;grid-template-columns:26px 1fr 10px;gap:6px;align-items:start;width:100%;text-align:left;border:0;background:transparent;padding:7px 6px;border-radius:7px;font-size:14px;line-height:1.45}
+.qbtn:hover{background:var(--soft)}
+.qbtn[aria-current="true"]{background:var(--accent-soft)}
+.qbtn .n{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-top:2px}
+.dot{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--line);margin-top:6px}
+.dot.done{background:var(--ok);border-color:var(--ok)}
+.dot.part{border-color:var(--accent);background:linear-gradient(90deg,var(--accent) 50%,transparent 50%)}
+.add-q{display:grid;gap:6px;border-top:1px solid var(--line);margin-top:8px;padding:10px 4px 2px}
+.add-q input{border:1px solid var(--line);border-radius:7px;padding:7px 9px;background:var(--bg);min-width:0}
+
+.work{display:grid;gap:14px}
+.qcard{background:var(--navy);color:var(--navy-ink);border-radius:var(--r);padding:18px 20px;display:grid;gap:6px}
+.qcard .meta{font-size:12.5px;opacity:.85;display:flex;gap:10px;flex-wrap:wrap}
+.qcard h2{font-size:clamp(20px,3vw,25px)}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;gap:10px}
+.step-h{display:flex;align-items:baseline;gap:10px}
+.step-h .no{font-family:var(--f-mono);font-size:13px;color:var(--accent);font-weight:600}
+.step-h h3{font-size:17px}
+.step p{margin:0}
+.intent{color:var(--muted)}
+.intent strong{color:var(--ink)}
+.kw{display:flex;flex-wrap:wrap;gap:6px}
+.kw .chip{font-size:13.5px}
+.kw .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.kw-add{display:flex;gap:6px}
+.kw-add input{flex:1;min-width:0;border:1px solid var(--line);border-radius:7px;padding:6px 9px;background:var(--bg)}
+.tri{display:grid;gap:12px}
+.field{display:grid;gap:4px}
+.field label{font-weight:700;font-size:14px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.field label span{font-weight:400;color:var(--muted);font-size:13px}
+textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg);resize:vertical;line-height:1.6;min-height:64px}
+textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;background:var(--paper)}
+#full{min-height:150px;font-size:15.5px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stat{font-size:13px;color:var(--muted)}
+.stat b{font-family:var(--f-mono);color:var(--ink)}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:8px 14px;font-weight:500;font-size:14px}
+.btn:hover{border-color:var(--navy)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:var(--navy-ink)}
+.btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.note{font-size:13px;color:var(--muted)}
+.checks{display:grid;gap:6px}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border-radius:7px;cursor:pointer}
+.checks label:hover{background:var(--soft)}
+.checks input{width:18px;height:18px;margin-top:3px;accent-color:var(--ok);flex:none}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:8px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
+
+/* 모의면접 */
+.mock{display:grid;grid-template-columns:1fr 320px;gap:18px;align-items:start}
+.mock>*{min-width:0}
+.stage{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:18px}
+.modes{display:flex;flex-wrap:wrap;gap:6px}
+.big-q{font-family:var(--f-display);font-size:clamp(22px,3.4vw,30px);font-weight:700;line-height:1.4;text-wrap:balance;min-height:2.8em}
+.timer{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.ring{width:150px;height:150px;position:relative;max-width:100%}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .t{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-family:var(--f-mono);font-size:30px;font-weight:600;line-height:1.1}
+.ring .t small{display:block;font-family:var(--f-body);font-size:11.5px;color:var(--muted);font-weight:400}
+.ring.over .t{color:var(--warn)}
+.tctl{display:grid;gap:10px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;width:max-content;max-width:100%}
+.seg button{border:0;background:var(--paper);padding:6px 12px;font-size:13px;font-family:var(--f-mono);color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.rec{border-top:1px dashed var(--line);padding-top:14px;display:grid;gap:10px}
+.switch{display:inline-flex;align-items:center;gap:8px;font-weight:500}
+.switch input{width:40px;height:22px;appearance:none;background:var(--line);border-radius:11px;position:relative;cursor:pointer;flex:none;transition:background .2s}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s}
+.switch input:checked{background:var(--warn)}
+.switch input:checked::after{left:21px}
+.recdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--warn);animation:blink 1s infinite;margin-right:6px}
+@keyframes blink{50%{opacity:.2}}
+@media (prefers-reduced-motion:reduce){.recdot{animation:none}.bar i{transition:none}}
+audio{width:100%}
+.side{display:grid;gap:14px}
+.box{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px}
+.box h3{font-size:16px}
+.myans{white-space:pre-wrap;font-size:14.5px;background:var(--bg);border-radius:8px;padding:10px 12px;max-height:260px;overflow:auto}
+.nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+
+/* 꿀팁 */
+.tips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.tip{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;display:grid;gap:10px;align-content:start}
+.tip h3{font-size:19px;display:flex;gap:10px;align-items:baseline}
+.tip h3 em{font-style:normal;font-family:var(--f-mono);font-size:13px;color:var(--accent)}
+.tip ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.tip li::marker{color:var(--accent)}
+.say{background:var(--accent-soft);border-radius:8px;padding:10px 12px;font-size:14.5px}
+.say b{font-family:var(--f-display)}
+.formula{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.formula div{border:1px solid var(--line);border-radius:8px;padding:10px;text-align:center;font-size:13px;color:var(--muted)}
+.formula b{display:block;font-family:var(--f-display);font-size:18px;color:var(--ink)}
+.tip.wide{grid-column:1/-1}
+.disclaimer{margin-top:22px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+/* 학교 찾기 */
+.finder{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:18px;align-items:start}
+.finder>*{min-width:0}
+.fbar{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px;margin-bottom:14px}
+.fbar input[type=search]{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 12px;background:var(--bg);font-size:15px}
+.frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.frow .lab{font-size:12.5px;color:var(--muted);min-width:44px}
+.summary{font-size:13.5px;color:var(--muted)}
+.summary b{color:var(--ink);font-family:var(--f-mono)}
+.slist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.scard{display:grid;gap:6px;align-content:start;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.scard:hover{border-color:var(--navy)}
+.scard[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.scard .nm{font-weight:700;font-size:15px;line-height:1.35}
+.scard .facts{font-size:12.5px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:12px;border-radius:5px;padding:1px 7px;background:var(--soft);color:var(--muted);white-space:nowrap}
+.tag.m{background:var(--navy);color:var(--navy-ink)}
+.tag.s{background:var(--accent-soft);color:var(--ink)}
+.tag.w{border:1px solid var(--line);background:transparent}
+.detail{background:var(--paper);border:1.5px solid var(--navy);border-radius:var(--r);padding:18px;display:grid;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);max-height:calc(100vh - 80px);overflow:auto}
+.detail h2{font-size:22px}
+.detail h3{font-size:15px;font-family:var(--f-body);font-weight:700}
+.kv{display:grid;grid-template-columns:72px 1fr;gap:4px 10px;font-size:14px}
+.kv dt{color:var(--muted)}.kv dd{margin:0}
+.depts{display:grid;gap:4px}
+.depts label{display:flex;gap:8px;align-items:center;padding:6px 8px;border:1px solid var(--line);border-radius:7px;cursor:pointer;font-size:14px}
+.depts label:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.depts input{accent-color:var(--accent)}
+.depts .cap{margin-left:auto;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.scorebar{display:flex;height:26px;border-radius:6px;overflow:hidden;font-size:12px;font-weight:500}
+.scorebar span{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;padding:0 4px}
+.scorebar .a{background:var(--soft);color:var(--ink)}
+.scorebar .b{background:var(--ok-soft);color:var(--ink)}
+.scorebar .c{background:var(--accent);color:#fff}
+.points{margin:0;padding-left:1.1em;display:grid;gap:6px;font-size:14px}
+.points li::marker{color:var(--accent)}
+.src{font-size:12px;color:var(--muted)}
+.empty{color:var(--muted);font-size:14px;padding:20px 4px}
+.mybox{background:var(--accent-soft);border-radius:var(--r);padding:14px 16px}
+.mybox summary{cursor:pointer;font-weight:700}
+.mybox ul{margin:8px 0 0;padding-left:1.1em;display:grid;gap:4px;font-size:14px}
+.pick{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+@media (max-width:860px){.finder{grid-template-columns:1fr}.detail{position:static;max-height:none;order:-1}.detail.is-empty{display:none}}
+
+/* 노트 */
+.notebook{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;display:grid;gap:16px}
+.entry{border-bottom:1px dashed var(--line);padding-bottom:14px;display:grid;gap:4px}
+.entry:last-child{border-bottom:0}
+.entry h3{font-size:16.5px}
+.entry .a{white-space:pre-wrap}
+.entry .k{font-size:12.5px;color:var(--muted)}
+#exportText{min-height:200px;font-size:13px;font-family:var(--f-body)}
+
+@media (max-width:860px){
+  .head{grid-template-columns:1fr}
+  .split,.mock{grid-template-columns:1fr}
+  .qlist{position:static;max-height:300px}
+  .tips{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  .tabs button{padding:9px 8px;font-size:14px}
+  .timer{grid-template-columns:1fr;justify-items:center}
+  .ring{width:140px;height:140px}
+  .formula b{font-size:16px}
+  .step,.stage,.tip{padding:14px}
+}
+</style>
+
+</head>
+<body>
+<a class="skip" href="#main">본문 바로 가기</a>
+<div class="wrap">
+  <header class="head">
+    <div class="title-block">
+      <span class="eyebrow">특성화고 · 마이스터고 입학 면접 대비</span>
+      <h1>나의 면접 연습장</h1>
+      <p>정답을 외우는 곳이 아니에요. 내 경험을 꺼내서 <b>생각 → 경험 → 계획</b> 세 문장으로 정리하고, 소리 내어 말하면서 다듬는 곳이에요.</p>
+    </div>
+    <div class="ticket" aria-label="내 지원 정보">
+      <label for="pfSchool">지원 학교 <input id="pfSchool" placeholder="예) ○○공업고등학교" autocomplete="off"></label>
+      <label for="pfMajor">지원 학과 <input id="pfMajor" placeholder="예) 전기과, 조리과, 디자인과" autocomplete="off"></label>
+      <small>적어 두면 질문 속 '우리 학교', '이 학과'가 내 지원 정보로 바뀌어요.</small>
+      <button class="btn" type="button" id="goFinder">서울 특성화고·마이스터고에서 고르기</button>
+    </div>
+  </header>
+
+  <div class="progress" aria-live="polite">
+    <span>나만의 답변 <b id="pgDone">0</b> / <b id="pgTotal">0</b></span>
+    <div class="bar" aria-hidden="true"><i id="pgBar"></i></div>
+    <span>모의면접 연습 <b id="pgPractice">0</b>회</span>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="메뉴">
+    <button role="tab" id="tab-find" aria-controls="p-find" aria-selected="false">학교 찾기</button>
+    <button role="tab" id="tab-build" aria-controls="p-build" aria-selected="true">답변 만들기</button>
+    <button role="tab" id="tab-mock" aria-controls="p-mock" aria-selected="false">모의면접</button>
+    <button role="tab" id="tab-tips" aria-controls="p-tips" aria-selected="false">면접 꿀팁</button>
+    <button role="tab" id="tab-note" aria-controls="p-note" aria-selected="false">답변 노트</button>
+  </nav>
+
+  <main id="main">
+    <!-- 학교 찾기 -->
+    <section class="panel" id="p-find" role="tabpanel" aria-labelledby="tab-find" hidden>
+      <div class="finder">
+        <div>
+          <div class="fbar">
+            <input type="search" id="fq" placeholder="학교 이름이나 학과로 찾기 (예: 조리, 로봇, 웹툰)" aria-label="학교·학과 검색" autocomplete="off">
+            <div class="frow" role="group" aria-label="학교 유형"><span class="lab">유형</span><span id="fType"></span></div>
+            <div class="frow" role="group" aria-label="분야"><span class="lab">분야</span><span class="frow" id="fField"></span></div>
+            <div class="frow"><span class="lab">조건</span><span id="fGender"></span>
+              <button class="chip" type="button" id="fDorm" aria-pressed="false">기숙사 있음</button></div>
+            <p class="summary" id="fSum"></p>
+          </div>
+          <div class="slist" id="sList"></div>
+        </div>
+        <aside class="detail" id="sDetail" aria-live="polite"></aside>
+      </div>
+      <p class="disclaimer">학교 정보는 서울특별시교육청 「2027학년도 특성화고 신입생 입학전형 요강」과 「2027학년도 산업수요맞춤형고(마이스터고) 신입생 입학전형 요강」(2026. 8.)에서 정리했어요. 모집 정원과 일정은 바뀔 수 있으니 지원 전에 반드시 학교 홈페이지와 최종 요강을 확인하세요.</p>
+    </section>
+
+    <!-- 답변 만들기 -->
+    <section class="panel" id="p-build" role="tabpanel" aria-labelledby="tab-build">
+      <div class="split">
+        <aside class="qlist" aria-label="질문 목록">
+          <div class="filters" id="filters"></div>
+          <div id="qItems"></div>
+          <form class="add-q" id="addQ">
+            <span class="note">지원 학교 예상 질문이 따로 있다면 추가하세요.</span>
+            <input id="addQInput" placeholder="질문을 입력하고 Enter" maxlength="120" aria-label="새 질문">
+          </form>
+        </aside>
+
+        <div class="work">
+          <details class="mybox" id="myBox" hidden open><summary id="myBoxT"></summary><ul id="myBoxL"></ul></details>
+          <div class="qcard">
+            <div class="meta"><span id="bCat"></span><span id="bTime"></span></div>
+            <h2 id="bQ"></h2>
+          </div>
+
+          <div class="step">
+            <div class="step-h"><span class="no">1</span><h3>질문의 뜻 읽기</h3></div>
+            <p class="intent" id="bIntent"></p>
+          </div>
+
+          <div class="step">
+            <div class="step-h"><span class="no">2</span><h3>경험 키워드 고르기</h3></div>
+            <p class="note">작은 역할도, 끝까지 해 본 일도 좋아요. 나에게 맞는 단어를 1~3개 골라 보세요.</p>
+            <div class="kw" id="bKw"></div>
+            <form class="kw-add" id="kwAdd"><input id="kwInput" placeholder="내 키워드 직접 쓰기" maxlength="20" aria-label="키워드 추가"><button class="btn" type="submit">추가</button></form>
+          </div>
+
+          <div class="step">
+            <div class="step-h"><span class="no">3</span><h3>생각 · 경험 · 계획 쓰기</h3></div>
+            <div class="tri">
+              <div class="field"><label for="tT">생각 <span id="hT"></span></label><textarea id="tT" rows="2"></textarea></div>
+              <div class="field"><label for="tE">경험 <span id="hE"></span></label><textarea id="tE" rows="3"></textarea></div>
+              <div class="field"><label for="tP">계획 <span id="hP"></span></label><textarea id="tP" rows="2"></textarea></div>
+            </div>
+            <div class="field">
+              <label for="full">전체 답변 <span id="fullState">세 문장을 쓰면 자동으로 이어져요.</span></label>
+              <textarea id="full" rows="6"></textarea>
+            </div>
+            <div class="row">
+              <span class="stat"><b id="cChars">0</b>자 · 말하면 약 <b id="cSec">0</b>초</span>
+              <span class="stat" id="cAdvice"></span>
+              <span style="flex:1"></span>
+              <button class="btn ghost" type="button" id="reJoin">세 문장으로 다시 잇기</button>
+            </div>
+            <p class="note">전체 답변을 직접 고치면, 그 뒤로는 위 세 칸을 바꿔도 자동으로 덮어쓰지 않아요.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-h"><span class="no">4</span><h3>소리 내어 말해 보기</h3></div>
+            <div class="checks" id="bChecks"></div>
+            <div class="row"><button class="btn primary" type="button" id="goMock">이 질문으로 모의면접 하기</button></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 모의면접 -->
+    <section class="panel" id="p-mock" role="tabpanel" aria-labelledby="tab-mock" hidden>
+      <div class="mock">
+        <div class="stage">
+          <div class="row" style="justify-content:space-between">
+            <div class="modes" role="group" aria-label="질문 순서">
+              <button class="chip" data-mode="order" aria-pressed="true">순서대로</button>
+              <button class="chip" data-mode="random" aria-pressed="false">무작위(실전처럼)</button>
+              <button class="chip" data-mode="written" aria-pressed="false">내가 쓴 질문만</button>
+            </div>
+            <span class="stat" id="mPos"></span>
+          </div>
+          <div>
+            <div class="note" id="mCat"></div>
+            <p class="big-q" id="mQ" aria-live="polite"></p>
+          </div>
+
+          <div class="timer">
+            <div class="ring" id="ring">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="var(--soft)" stroke-width="9"/>
+                <circle id="ringArc" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="9" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/>
+              </svg>
+              <div class="t" role="timer" aria-live="off"><div><span id="tNum">1:30</span><small id="tLabel">남은 시간</small></div></div>
+            </div>
+            <div class="tctl">
+              <div class="seg" role="group" aria-label="답변 시간">
+                <button data-sec="30" aria-pressed="false">30초</button>
+                <button data-sec="60" aria-pressed="false">60초</button>
+                <button data-sec="90" aria-pressed="true">90초</button>
+                <button data-sec="120" aria-pressed="false">2분</button>
+                <button data-sec="180" aria-pressed="false">3분</button>
+              </div>
+              <div class="row">
+                <button class="btn accent" id="tStart" type="button">시작</button>
+                <button class="btn" id="tPause" type="button" disabled>일시정지</button>
+                <button class="btn ghost" id="tReset" type="button">처음으로</button>
+              </div>
+              <p class="note" id="tHint">질문마다 알맞은 시간이 기본으로 맞춰져요. 시간이 지나도 멈추지 않고 초과 시간을 보여 줘요.</p>
+            </div>
+          </div>
+
+          <div class="rec">
+            <label class="switch" for="recOn"><input type="checkbox" id="recOn" role="switch"> 녹음하기 <span class="note" id="recState">꺼짐</span></label>
+            <p class="note" id="recNote">켜 두면 '시작'을 누를 때 함께 녹음돼요. 최대 3분, 질문마다 가장 최근 녹음 1개만 남고, 목소리는 어디에도 전송되지 않아요.</p>
+            <div id="recOut" hidden class="row" style="display:grid;gap:8px">
+              <audio id="recAudio" controls></audio>
+              <div class="row">
+                <button class="btn" type="button" id="recSave">녹음 파일 저장</button>
+                <button class="btn ghost" type="button" id="recDel">녹음 지우기</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav">
+            <button class="btn" type="button" id="mPrev">← 이전 질문</button>
+            <button class="btn ghost" type="button" id="mEdit">이 답변 고치기</button>
+            <button class="btn primary" type="button" id="mNext">다음 질문 →</button>
+          </div>
+        </div>
+
+        <div class="side">
+          <div class="box">
+            <h3>스스로 점검</h3>
+            <p class="note">합격·불합격을 가리는 평가가 아니에요. 말해 본 뒤 솔직하게 체크하고, 다음엔 하나만 고쳐요.</p>
+            <div class="checks" id="mChecks"></div>
+            <button class="btn" type="button" id="mDone">연습 1회 기록</button>
+            <span class="stat" id="mCount"></span>
+          </div>
+          <div class="box">
+            <div class="row" style="justify-content:space-between"><h3>내 답변</h3><button class="btn ghost" id="mShow" type="button" aria-expanded="false">보기</button></div>
+            <p class="note" id="mAnsHint">먼저 보지 않고 말해 본 뒤 확인해 보세요.</p>
+            <div class="myans" id="mAns" hidden></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 면접 꿀팁 -->
+    <section class="panel" id="p-tips" role="tabpanel" aria-labelledby="tab-tips" hidden>
+      <div class="tips">
+        <article class="tip">
+          <h3><em>D-7</em>미리 알아보기</h3>
+          <ul>
+            <li>지원 학교의 <b>입학 요강</b>에서 면접 방식(개별·집단, 시간, 질문 공개 여부)을 꼭 확인해요.</li>
+            <li>학교 홈페이지에서 학과 소개, 교육과정, 실습, 취득 가능한 자격증, 동아리, 졸업 후 진로를 찾아봐요.</li>
+            <li>자기소개서와 학교생활기록부를 다시 읽어요. 면접 질문은 서류에 쓴 내용에서 많이 나와요.</li>
+            <li><b>블라인드 면접</b>이라면 내 이름, 출신 중학교, 가족의 직업 등을 말하지 않도록 미리 연습해요.</li>
+          </ul>
+        </article>
+        <article class="tip">
+          <h3><em>D-day</em>준비와 태도</h3>
+          <ul>
+            <li>시간 여유를 두고 일찍 도착해요. 교통편과 면접 장소를 전날 확인해 두면 마음이 편해요.</li>
+            <li>교복을 단정히 입고, 액세서리는 피하고, 머리는 얼굴이 잘 보이게 정리해요.</li>
+            <li>들어갈 때 인사, 앉으라고 하면 앉기, 끝나면 "감사합니다" 인사 후 나오기.</li>
+            <li>허리를 펴고 면접관 눈(또는 코 근처)을 보며 말해요. 대기실에서도 면접은 시작된 거예요.</li>
+          </ul>
+        </article>
+        <article class="tip wide">
+          <h3><em>답변</em>세 문장 공식</h3>
+          <div class="formula">
+            <div><b>생각</b>질문에 대한 내 결론을 먼저</div>
+            <div><b>경험</b>그렇게 생각하는 이유, 실제 있었던 일 하나</div>
+            <div><b>계획</b>입학 후 어떻게 이어갈지</div>
+          </div>
+          <ul>
+            <li>결론을 먼저 말해요(두괄식). "저는 ○○이라고 생각합니다. 왜냐하면…"</li>
+            <li>"열심히 하겠습니다"보다 <b>실제로 한 행동</b> 하나가 훨씬 힘이 세요. 언제, 무엇을, 어떻게 했는지 넣어요.</li>
+            <li>과장하지 않아요. 작은 경험이라도 내가 직접 한 일이 가장 좋은 답이에요.</li>
+            <li>"~요"보다 "~습니다"로 끝맺고, 마지막 문장은 끝까지 또렷하게 말해요.</li>
+          </ul>
+        </article>
+        <article class="tip">
+          <h3><em>긴장</em>머리가 하얘질 때</h3>
+          <div class="say">"<b>잠시 생각해 봐도 괜찮을까요?</b>"<br>이렇게 말하고 3초 동안 생각 → 경험 → 계획 순서를 떠올려요.</div>
+          <ul>
+            <li>문장 전체를 외우지 말고 <b>핵심 단어 3개</b>만 기억해요.</li>
+            <li>모르는 질문엔 솔직하게: "정확히는 모르지만, 입학하면 꼭 배워 보고 싶습니다."</li>
+            <li>말이 꼬이면 "다시 말씀드리겠습니다" 하고 차분히 다시 시작해도 괜찮아요.</li>
+          </ul>
+        </article>
+        <article class="tip">
+          <h3><em>연습</em>반복하는 방법</h3>
+          <ul>
+            <li>한 번 말해 보고, 피드백을 받고, <b>한 가지만</b> 고쳐요. 한꺼번에 다 고치려 하면 오히려 흔들려요.</li>
+            <li>녹음해서 들어 보면 말 빠르기, '음…' 같은 버릇이 잘 들려요.</li>
+            <li>가족이나 친구에게 면접관 역할을 부탁해 '무작위' 모드로 연습해요.</li>
+            <li>휴대폰 카메라로 표정과 자세를 확인해 보세요. (이 프로그램은 촬영하지 않아요.)</li>
+          </ul>
+        </article>
+        <article class="tip wide">
+          <h3><em>요강</em>서울 특성화고·마이스터고 면접, 이렇게 봐요</h3>
+          <ul>
+            <li>특성화고 <b>미래인재 특별전형</b>은 대부분 <b>출결 + 봉사활동 + 심층면접</b>을 합쳐 선발해요. 심층면접 비중이 가장 커요(대개 100점 중 60점).</li>
+            <li>2개 학과 이상 지망해도 <b>1지망 학과</b> 면접으로 평가하는 학교가 많아요. 1지망 학과 답변을 가장 깊게 준비하세요.</li>
+            <li>심층면접에 <b>불참하면 불합격</b> 처리돼요. 면접 시간과 장소는 학교 홈페이지나 문자로 개별 안내되니 꼭 확인해요.</li>
+            <li>입학설명회, 진로체험, 캠프에 참여하면 <b>가산점</b>을 주는 학교가 많아요. '학교 찾기'에서 지원 학교의 면접 포인트를 확인하세요.</li>
+            <li>디자인·공연·체육 계열 학과는 면접과 함께 <b>실기평가</b>가 있는 경우가 많고, 포트폴리오를 받는 학교도 있어요.</li>
+            <li>마이스터고는 심층면접과 함께 <b>적성·소양(역량) 검사</b>를 보는 곳이 많고, 특성화고보다 먼저 전형이 진행돼요.</li>
+          </ul>
+        </article>
+        <article class="tip wide">
+          <h3><em>전날</em>면접 준비물 체크</h3>
+          <div class="checks" id="dayChecks"></div>
+        </article>
+      </div>
+      <p class="disclaimer">이 프로그램은 스스로 연습하기 위한 학습 도구예요. 실제 면접 형식, 시간, 준비물은 학교마다 다르니 지원 학교의 입학 요강과 최종 공지를 꼭 확인하세요.</p>
+    </section>
+
+    <!-- 답변 노트 -->
+    <section class="panel" id="p-note" role="tabpanel" aria-labelledby="tab-note" hidden>
+      <div class="notebook">
+        <div class="row" style="justify-content:space-between">
+          <h2 style="font-size:22px">내 답변 노트</h2>
+          <div class="row">
+            <button class="btn primary" type="button" id="exCopy">전체 복사</button>
+            <button class="btn" type="button" id="exTxt">TXT 파일로 저장</button>
+          </div>
+        </div>
+        <p class="note">답변은 지금 쓰는 이 기기의 이 브라우저에만 자동 저장돼요. 다른 기기로 옮겨지지 않고, 브라우저 기록을 지우거나 시크릿 창을 닫으면 사라질 수 있어요. 중요한 답변은 복사하거나 파일로 저장해 두세요.</p>
+        <div id="noteList"></div>
+        <details>
+          <summary class="note" style="cursor:pointer">복사가 안 될 때: 텍스트 직접 선택하기</summary>
+          <textarea id="exportText" readonly aria-label="전체 답변 텍스트"></textarea>
+        </details>
+        <div class="row" style="justify-content:flex-end">
+          <button class="btn ghost" type="button" id="resetAll">모든 기록 지우기</button>
+          <span id="resetConfirm" hidden class="row"><span class="note">정말 지울까요? 되돌릴 수 없어요.</span><button class="btn" type="button" id="resetYes" style="color:var(--warn)">지우기</button><button class="btn ghost" type="button" id="resetNo">취소</button></span>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+"use strict";
+const SCHOOLS=[{"n":"미림마이스터고등학교","t":"M","r":"전국","rn":"서울특별시 외 지역은 모집 정원의 25% 이내 선발","dm":true,"g":"","hp":"http://www.e-mirim.hs.kr","d":[["지능형소프트웨어과",72],["지능형디자인과",36]],"cm":"","sp":["마이스터인재전형","캠프수료자전형","사회통합전형"],"sc":null,"iv":["모든 전형에 심층면접: 지원분야 이해·미래설계계획·인성 및 태도(각 25점)","인·적성검사 실시","마이스터인재전형은 구술면접(창의적 문제해결력, 지능형소프트웨어과는 수리력) 반영","캠프수료자전형은 본교 캠프 성적 반영","자기소개서 제출, 2개 학과까지 지망"],"x":[]},{"n":"서울도시과학기술고등학교","t":"M","r":"전국","rn":"서울특별시 외 지역은 모집정원의 30% 이내 선발","dm":true,"g":"","hp":"https://sust.sen.hs.kr","d":[["해외플랜트산업설비과",36],["에코공정플랜트과",18],["해외건설전기통신과",36],["해외시설물건설과",36]],"cm":"","sp":["마이스터 인재 전형","아카데미 이수자 전형","사회통합 전형"],"sc":null,"iv":["마이스터 적성·소양검사: 언어이해력·응용계산력·공간지각력·문제해결력·인성","심층면접: 영마이스터 자질과 진로 적합성, 해외건설·플랜트 분야 이해도, 인성 및 태도","자기소개서(지원동기·진로계획)와 학업계획서(자기주도학습 역량)는 2차 전형일에 학교에서 직접 작성","특별전형: 마이스터 인재, 아카데미 이수자(본교 아카데미 수료자)"],"x":[["","해외 건설·플랜트 분야에 관심을 갖게 된 계기는 무엇인가요?",90]]},{"n":"서울로봇고등학교","t":"M","r":"전국","rn":"","dm":true,"g":"","hp":"http://srobot.sen.hs.kr","d":[["로봇설계과",36],["로봇제어과",36],["로봇소프트웨어과",36],["로봇정보통신과",18]],"cm":"","sp":["마이스터 인재 전형","사회통합전형"],"sc":null,"iv":["면접 80점 + 인성·가치 기반 학습 역량 검사","면접 4문항: 1~2번은 미리 공개된 문항(2배수) 중 출제 → 복도 대기 중 3분 메모 후 면접실에서 2문항을 3분 안에 답변(면접관이 따로 질문하지 않음)","3~4번 문항은 면접실에서 공개 → 1분 생각, 2분 답변, 추가 질문 가능","로봇정보통신과는 국방부 지정 마이스터 군특성화 학과"],"x":[["","(실전 연습) 질문을 보고 3분 동안 메모한 뒤, 2문항을 합쳐 3분 안에 답해 보세요.",180]]},{"n":"서울반도체고등학교","t":"M","r":"전국","rn":"서울특별시 외 지역은 모집정원의 30% 선발","dm":true,"g":"","hp":"https://ssc.sen.hs.kr","d":[["반도체장비과",32],["반도체제조과",32]],"cm":"","sp":["마이스터 인재 전형","사회통합전형"],"sc":null,"iv":["마이스터 역량검사(언어이해력·응용계산력·공간지각력·문제해결력·인성)","심층면접: 영마이스터 자질과 진로 적합성(지원 분야 이해 등), 특별전형은 심층면접 비중이 큼","특별전형에 지원하면 일반전형에도 자동 지원","전형 총점 60% 미달 시 정원과 관계없이 불합격"],"x":[]},{"n":"수도전기공업고등학교","t":"M","r":"전국","rn":"서울특별시 외 지역은 모집정원의 42% 이내 선발","dm":true,"g":"","hp":"https://sudo.sen.hs.kr/","d":[["전기에너지과",72],["에너지전자제어과",36],["에너지기계과",36],["에너지정보통신과",36]],"cm":"","sp":["마이스터 인재 전형","봉사활동 우수자 전형","사회통합전형"],"sc":null,"iv":["마이스터 적성·소양검사 5개 영역(언어이해력·응용계산력·공간지각력·문제해결력·인성)","심층면접 평가 영역: 직업기초능력, 문제해결능력, 예의/예절","봉사활동 우수자 전형: 중학교 봉사 50시간 이상 + 학교장 추천","특별전형 1개 학과, 일반전형 4개 학과까지 지망"],"x":[]},{"n":"경기기계공업고등학교","t":"S","r":"전국","rn":"","dm":true,"g":"","hp":"https://ggmt.sen.hs.kr","d":[["로봇자동화과",18],["하이텍융합기계과",18],["메이커제품설계과",18],["항공드론과",20],["스마트설비과",20],["반도체재료과",36],["반도체메카트로닉스과",36],["전기시스템과",36],["컴퓨터전자과",36]],"cm":"","sp":[],"sc":[20,20,60],"iv":["미래인재 특별전형: 출결 20 + 봉사 20 + 심층면접 60","2개 학과 이상 지망해도 1지망 학과 면접으로 평가","기숙사는 원거리 학생 우선 선발"],"x":[]},{"n":"경기상업고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://ggc.sen.hs.kr","d":[["경찰행정과",40],["부사관행정과",20],["공공행정과",20],["스포츠경영과",40],["뷰티디자인과",40],["영화영상과",20]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["스포츠경영과는 면접 30 + 실기 30(사이드스텝, 서전트점프, 10m 왕복달리기), 체육복·운동화 준비","여름 진로캠프 이수자 심층면접 가산점 5점","경찰행정·부사관행정·공공행정 등 공공 분야 학과가 특징"],"x":[]},{"n":"경복비즈니스고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://kbb.sen.hs.kr/","d":[["관광서비스과",36],["스마트경영과",20],["AI융합콘텐츠과",40],["콘텐츠디자인과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["미래인재: 출결 30 + 봉사 10 + 심층면접 60"],"x":[]},{"n":"고명외식고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"https://komyung.sen.hs.kr/","d":[["외식경영과",40],["디저트제과경영과",40],["카페경영과",40],["국제관광과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["미래인재: 출결 30 + 봉사 10 + 심층면접 60","모집 지역: 서울·인천·경기"],"x":[]},{"n":"광신방송예술고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://ksmedia.sen.hs.kr/","d":[["미디어메이크업아티스트과",20],["연예엔터테인먼트과",20],["방송영상과",40],["만화영상과",40]],"cm":"","sp":["예술인재 특별전형","체육특기자 전형"],"sc":[30,10,60],"iv":["미디어메이크업아티스트과·연예엔터테인먼트과: 면접 30(전공 기초 지식, 인성·기본 소양) + 실기 30(주제 당일 추첨)","방송영상과: '제작하고 싶은 영상'을 3분 이내로 구술 발표","만화영상과: 포트폴리오 필수 제출, 포트폴리오 관련 질문","여름 캠프 수료 시 가산점 3점, 예술인재 특별전형(만화영상과)은 실기 80점"],"x":[["방송영상과","제작하고 싶은 영상에 대해 3분 이내로 발표해 보세요.",180],["만화영상과","포트폴리오에 담은 작품 중 가장 자신 있는 작품을 소개해 보세요.",90]]},{"n":"광운인공지능고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://kwangwoon.sen.hs.kr/","d":[["인공지능컴퓨팅과",36],["AI로봇과",36],["AI정보콘텐츠과",36],["인공지능전기과",36],["인공지능소프트웨어과",36]],"cm":"","sp":["AI인재 특별전형","체육 특기자 전형"],"sc":[30,10,60],"iv":["AI인재 특별전형: 본교 인공지능 체험 썸머캠프 참여자 대상","썸머캠프 평가 요소: 전공 관심도(설문), 태도(예의·품행), 발전 가능성 각 20점"],"x":[]},{"n":"단국대학교부속소프트웨어고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"남","hp":"https://dankook.sen.hs.kr","d":[["공통 모집",100]],"cm":"2학년 진급 시 인공지능소프트웨어과·사물인터넷소프트웨어과·게임콘텐츠과로 편성","sp":["SW역량우수자 특별전형","SW취창업역량우수자 특별전형"],"sc":[20,10,70],"iv":["남학생 모집, 학과 구분 없이 공통 모집(2학년 때 인공지능소프트웨어과·사물인터넷소프트웨어과·게임콘텐츠과로 편성)","적성검사(국·영·수) + 학교생활기록부 기반 SW 잠재력 심층면접(70점)","SW역량우수자: 적성검사에 C언어 포함, 포트폴리오 기반 면접","SW취창업역량우수자: 취·창업 계획 발표로 기획력과 잠재력 평가"],"x":[["","소프트웨어 분야에서 이루고 싶은 취·창업 계획을 발표해 보세요.",120]]},{"n":"대경생활과학고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://www.daekyeong.hs.kr","d":[["스마트경영과",18],["핀테크경영과",18],["방송공연콘텐츠과",40],["캐릭터디자인과",40],["푸드조리디자인과",40]],"cm":"","sp":["글로벌인재 전형","예술특기자선발 전형"],"sc":[30,10,60],"iv":["글로벌인재 전형, 예술특기자선발 전형(방송·공연·콘텐츠 분야) 운영","예술특기자: 실기(실용음악·실용무용 등) + 지원동기·전공 소양 구술 문답","전공 관련 자료나 포트폴리오는 면접 당일 제출 가능"],"x":[["방송공연콘텐츠과","실기 후 구술 문답: 지원동기와 전공에 대한 나의 준비를 말해 보세요.",60]]},{"n":"대동세무고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://daedong.sen.hs.kr","d":[["공통 모집",160]],"cm":"2학년 진급 시 세무회계과·관세무역과로 편성","sp":["회계교육 이수자 특별전형","체육특기자 전형"],"sc":[20,20,60],"iv":["학과 구분 없이 공통 모집(2학년 때 세무회계과·관세무역과로 편성)","회계교육 이수자 특별전형: 본교 회계교육 이수 학생 대상, 회계교육 평가 성적 반영","미래인재: 출결 20 + 봉사 20 + 심층면접 60"],"x":[]},{"n":"대일관광고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://daeil-tour.sen.hs.kr","d":[["호텔항공과",40],["베이커리디저트과",40],["외식산업과",20],["뷰티아트과",40]],"cm":"","sp":["글로벌리더 전형"],"sc":[30,10,60],"iv":["여학생 모집","글로벌리더 전형: 본교 프로그램(오픈클래스·방학캠프·입학설명회) 수료, 교사 추천 등 지원서류 평가"],"x":[]},{"n":"대진디자인고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"https://daejindesign.sen.hs.kr","d":[["시각디자인과",60],["인테리어디자인과",60],["메타버스디자인과",60]],"cm":"","sp":["디자인인재 특별전형"],"sc":[30,10,60],"iv":["디자인인재 특별전형: 면접 + 실기(창의성 등)","실기 주제는 10월 첫째 주 홈페이지에 공개(주제 2개 중 1개 출제), 종이·4B연필·지우개 지급","시각디자인과는 실기평가 후 면접"],"x":[]},{"n":"덕일전자공업고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://di.sen.hs.kr/","d":[["전자시스템제어과",18],["전자과",18],["로봇드론과",36]],"cm":"","sp":["디지털인재 특별전형"],"sc":[30,10,60],"iv":["디지털인재 특별전형: 학과 체험·입학설명회 참여, 중학교 교사 추천 등 + 심층면접 50","전자·로봇·드론 등 디지털 산업 분야"],"x":[]},{"n":"동명생활경영고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"http://dmgcab.sen.hs.kr/","d":[["뷰티아트과",40],["뷰티메디컬케어과",18],["영유아보육과",36]],"cm":"","sp":["동명인재 특별전형"],"sc":[30,10,60],"iv":["여학생 모집","본교 진로캠프·공모전 참가자 심층면접 가산점 5점","동명인재 특별전형: 본교 중학생 대상 프로그램(진로체험·입학설명회·진로캠프 등) 참여 역량 평가"],"x":[]},{"n":"리라아트고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://lila.sen.hs.kr","d":[["영상음악콘텐츠과",80],["건강과학과",40]],"cm":"","sp":["실기 특별전형","체육특기자 전형"],"sc":null,"iv":["미래인재: 1차 서류·특기영상 → 2차 그룹면접(50점)","실기 특별전형: 1차 실기 영상 → 2차 심층 실기평가(보컬은 대중음악곡 2곡 이상 등)","건강과학과 실기: 제자리멀리뛰기, 배근력, 좌전굴"],"x":[]},{"n":"미래산업과학고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://mist.sen.hs.kr","d":[["피지컬AI과",36],["컴퓨터미디어과",40],["인공지능콘텐츠과",40],["웹툰디자인과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["1지망 지원 학과에서 심층면접 실시"],"x":[]},{"n":"상일미디어고등학교","t":"S","r":"서울특별시·경기도","rn":"","dm":false,"g":"","hp":"https://sangilmedia.sen.hs.kr","d":[["인공지능소프트웨어과",36],["사물인터넷과",36],["디자인과",36],["디지털만화영상과",40],["바이오푸드과",40]],"cm":"","sp":["상일인재 특별전형"],"sc":[30,10,60],"iv":["실기평가(제시된 상황을 인물·배경·동작·화면 구성으로 그림 표현) + 심층면접","상일인재 특별전형: 심층면접 40 + 자기실적 20(진로체험 이수, 학과 관련 포트폴리오 등)"],"x":[]},{"n":"서서울생활과학고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"https://ssls.sen.hs.kr","d":[["실용음악과",20],["생활체육과",20],["국제뷰티아트과",40],["국제조리과학과",40],["제과제빵과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["실용음악과: 면접 10 + 실기 50","생활체육과: 면접 45 + 기초체력 15(왕복오래달리기, 앉아윗몸앞으로굽히기, 제자리멀리뛰기)","그 밖의 학과: 심층면접 60"],"x":[]},{"n":"서울공업고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://seoul-th.sen.hs.kr/","d":[["스마트기계과",20],["스마트용접설비과",20],["미래자동차과",40],["시스템자동화과",18],["친환경에너지전기과",20],["전자과",20],["신재생에너지과",18],["스마트건축토목과",36],["바이오화공과",20],["섬유패션디자인과",20],["그래픽아트과",18],["신소재세라믹과",20]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["심층면접 57점: 적성·역량(28점) + 의사소통(29점)","진로활동 평가: 본교 진로활동 1회 참여 시 1점","12개 학과로 공업 분야 선택 폭이 넓음"],"x":[["","팀으로 실습할 때 의견이 다르면 어떻게 의사소통하겠어요?",90]]},{"n":"서울관광고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoul-tour.sen.hs.kr","d":[["카페경영과",40],["관광서비스과",40],["외식조리과",80]],"cm":"","sp":[],"sc":[20,10,70],"iv":["미래인재: 출결 20 + 봉사 10 + 면접 50 + 진로체험 20","진로체험 점수: 입학설명회·서광전공체험 참여 횟수로 산정","기독교 건학이념에 따라 예배·종교 수업 참여","카페경영과·외식조리과 실습에 지장이 있다고 판단되면 불합격 가능"],"x":[["","입학설명회나 전공체험에서 가장 인상 깊었던 점은 무엇인가요?",60]]},{"n":"서울금융고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoulfc.sen.hs.kr/","d":[["금융과",18],["스타트업과",18],["브랜딩디자인과",18],["게임디자인과",20],["반려동물과",40],["디저트경영과",18]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["본교 진로체험 참가·입학설명회 참석 시 심층면접 가산점(최대 5점)"],"x":[]},{"n":"서울동구고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://donggoo.sen.hs.kr","d":[["스마트금융경영과",40],["디지털콘텐츠과",36],["디자인과",36],["공연예술과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 평가 내용: 진로계획 및 지원동기(지원학과에 대한 태도, 적극성), 발전 가능성","진로캠프·진로체험·입학설명회 참여 가산점 최대 2점","실기평가 세부사항은 홈페이지 공지"],"x":[["","지원 학과에서 공부한 뒤의 진로계획을 말해 보세요.",90]]},{"n":"서울동산고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seouldongsan.sen.hs.kr","d":[["보건간호과",40],["영유아보육과",40],["뷰티아트과",80],["외식조리과",60],["음악영상콘텐츠과",40],["스포츠경영과",40]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["보건간호·영유아보육·뷰티아트·외식조리과: 심층면접 60(취업 의욕과 준비 노력 평가)","음악영상콘텐츠과: 실기(연주) 포함, 인성·기본 소양 질문","스포츠경영과: 면접 30 + 실기 30(윗몸 앞으로 굽히기, 제자리멀리뛰기)"],"x":[]},{"n":"서울디자인고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"https://seodi.sen.hs.kr/","d":[["패션액세서리디자인과",20],["웹툰콘텐츠과",20],["AI아트크리에이티브과",36],["스마트패션디자인과",40],["영상디자인과",20],["푸드스타일디자인과",80],["K-POP뮤직디자인과",36]],"cm":"","sp":["서디캠프 특별전형","실기 특별전형","체육특기자 전형"],"sc":[30,10,60],"iv":["서디캠프 특별전형: 본교 서디캠프 참가자의 활동 평가","실기 특별전형: K-POP뮤직디자인과(보컬·기악) 현장 실기"],"x":[]},{"n":"서울디지털콘텐츠고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://sdcont.sen.hs.kr/","d":[["건축과",18],["바이오환경에너지과",18],["스마트정보통신과",18],["VR콘텐츠디자인과",20],["영상콘텐츠디자인과",20]],"cm":"","sp":["SDC 특별전형"],"sc":null,"iv":["디지털(공학) 분야 학과: 심층면접 60","콘텐츠 분야(VR콘텐츠디자인과·영상콘텐츠디자인과): 심층면접 30 + 실기 30","심층면접·실기 세부사항은 홈페이지 공지, SDC 특별전형 운영"],"x":[]},{"n":"서울디지텍고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://www.sdh.hs.kr","d":[["게임융합과정",80]],"cm":"2학년 진급 시 게임개발과·인공지능게임과로 편성","sp":["전공인재 특별전형"],"sc":[30,10,60],"iv":["게임융합과정 공통 모집(2학년 때 게임개발과·인공지능게임과로 편성)","전공인재 특별전형: 심층면접 30 + 포트폴리오 40(게임 프로그래밍·그래픽·기획·음악, AI, 웹툰 등)"],"x":[]},{"n":"서울매그넷고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://seoulmagnet.sen.hs.kr","d":[["시각디자인과",20],["시각애니메이션과",40],["베이커리과",40],["카페디저트과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["여학생 모집","전공진로체험·입학설명회·썸머캠프 참가, 공모전·수상 실적 가산점"],"x":[]},{"n":"서울문화고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoulculture.sen.hs.kr","d":[["경영금융과",18],["광고마케팅과",18],["엔터테인먼트과",20],["영상크리에이터과",18],["스마트소프트웨어과",18],["콘텐츠디자인과",18],["영상애니메이션디자인과",20]],"cm":"","sp":["문화인재 전형"],"sc":[30,10,60],"iv":["심층면접 = 실기 30 + 면접 30, 실기는 장르 상관없이 본인 특기를 1분 이내로 압축해 보여 주기","문화인재 전형: 수상·리더십·본교 프로그램 참여 등 문화인재역량 평가"],"x":[["","나의 특기를 1분 안에 소개하고 보여 준다면 무엇을 준비하겠어요?",60]]},{"n":"서울방송고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seb.sen.hs.kr","d":[["방송영상과",40],["미디어콘텐츠과",40],["방송시스템과",40],["방송연예공연과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["방송연예공연과: 면접 + 실기(지정 연기·특기 등)","방송영상·미디어콘텐츠·방송시스템과: 심층면접 60"],"x":[]},{"n":"서울백영고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://sby.sen.hs.kr/","d":[["항공비즈니스과",18],["방송영상과",18],["미디어콘텐츠과",18],["웹툰제작과",20],["국제조리과",20],["디저트제과제빵과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["웹툰제작과는 작품 포트폴리오가 있으면 면접 때 제출 가능"],"x":[]},{"n":"서울신정고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://shinjeong.sen.hs.kr/","d":[["웹크리에이터과",18],["생활체육과",36],["푸드조리과",36],["베이커리과",36]],"cm":"","sp":["체육특기자 전형"],"sc":null,"iv":["생활체육과: 심층면접 30 + 실기 30(제자리멀리뛰기, 20m 왕복달리기)","웹크리에이터·푸드조리·베이커리과: 심층면접 60"],"x":[]},{"n":"서울아이티고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoulit.sen.hs.kr/","d":[["영상디자인과",36],["지능형사이버보안과",40],["애니메이션디자인과",36],["스마트웹콘텐츠과",20],["스마트융합스포츠과",20]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["애니메이션디자인과 심층면접 가산점 항목 있음(요강 참고)"],"x":[]},{"n":"서울여자상업고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://sys.sen.hs.kr","d":[["공통 모집",144]],"cm":"2학년 진급 시 금융투자과·글로벌경영과로 편성","sp":[],"sc":[30,10,60],"iv":["여학생 모집, 공통 모집(2학년 때 금융투자과·글로벌경영과로 편성)"],"x":[]},{"n":"서울영상고등학교","t":"S","r":"전국","rn":"","dm":true,"g":"","hp":"http://www.youngsang.hs.kr","d":[["영상콘텐츠과",40],["영상미디어과",40],["영상프로듀스과",40]],"cm":"","sp":["영상인재 특별전형"],"sc":[30,10,60],"iv":["제시된 질문지를 A4에 창의적으로 작성(30분) → 제출 후 개별면접(10분 내외)","소질·능력, 발전 가능성, 취업 의지 평가","영상인재 특별전형: 포트폴리오 및 면접 40 + 학교생활기록부 30 + 실기 30","기숙사(약 90명) 운영, 기독교 정신에 따른 종교 활동 포함"],"x":[["","질문지에 창의적으로 작성한 내용을 바탕으로 설명해 보세요.",90]]},{"n":"서울웹툰애니메이션고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://swas.sen.hs.kr/","d":[["웹툰·애니메이션계열",80],["게임콘텐츠과",20]],"cm":"웹툰·애니메이션계열은 2학년 진급 시 웹툰과·애니메이션과로 편성","sp":["SWAS인재 특별전형"],"sc":[20,10,70],"iv":["웹툰·애니메이션계열 공통 모집(2학년 때 웹툰과·애니메이션과)","실기평가 비중이 크고 면접은 기본 소양·분야 이해 중심"],"x":[]},{"n":"서울의료보건고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://smh.sen.hs.kr","d":[["보건간호과",100]],"cm":"","sp":[],"sc":[30,10,60],"iv":["보건간호과 단일 학과, 심층면접 60"],"x":[]},{"n":"서울인공지능고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoulai.sen.hs.kr/","d":[["AI컴퓨터과",36],["AI로봇과",18],["전기에너지과",36],["AI콘텐츠디자인과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 30 + 실기 30, 대면으로 실시","실기: AI컴퓨터과 컴퓨팅 사고력·파이썬 기초, 전기에너지과 전기·에너지 기초역량, AI콘텐츠디자인과 이미지 2개를 골라 창의적으로 표현(수작업)","학과 관련 포트폴리오 제출 시 가산점 2점, 본교 캠프 참여 가산점"],"x":[]},{"n":"서울정화고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"","d":[["부사관과",36],["방송연예콘텐츠과",20],["카페베이커리과",20],["뷰티디자인과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["여학생 모집","부사관과: 면접 50 + 체력평가","학과 체험 참여, 리더십 활동, 수상 실적 가산점(면접 때 사본 제출)"],"x":[]},{"n":"서울컨벤션고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"https://seoul-chs.sen.hs.kr/","d":[["미디어사운드과",40],["베이커리카페과",40],["컨벤션외식조리과",40],["관광레저과",80]],"cm":"","sp":["실기 전형","스포츠 레저 인재 전형","조리 인재 전형","스포츠 레저 특별전형"],"sc":[30,10,60],"iv":["심층면접 평가 요소: 태도(예의·자세·음성), 답변 내용(창의성·논리성·의사표현)","실기 전형(미디어사운드과), 스포츠 레저 인재 전형, 조리 인재 전형(전공 역량 면접 30 + 포트폴리오 30)","전공캠프 수료자 가산점"],"x":[["미디어사운드과","실용음악(실용무용)과 관련한 나의 경험을 1분 내외로 말해 보세요.",60]]},{"n":"서울홍신고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoul-hongshin.sen.hs.kr/","d":[["간호과",36],["콘텐츠크리에이터과",20],["뷰티아트과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["1지망 지원 학과에서 심층면접 실시"],"x":[]},{"n":"서일문화예술고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seoil.sen.hs.kr","d":[["외식베이커리과",60],["뮤지컬연기과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 = 실기 40 + 면접 20","자유특기(뮤지컬 가창·연기·무용 등) 2분 내외 시연 후 면접관 질문에 답변","면접 복장은 이름·출신 중학교를 알 수 없는 단정한 복장"],"x":[["","준비한 자유특기를 시연한 뒤 받을 수 있는 질문: 이 특기를 선택한 이유는 무엇인가요?",60]]},{"n":"선린인터넷고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://sunrint.sen.hs.kr/","d":[["정보보호과",60],["소프트웨어과",60],["IT경영과",40],["콘텐츠디자인과",40]],"cm":"","sp":["본교 특별교육과정 이수자 특별전형","체육특기자 전형"],"sc":[30,10,60],"iv":["심층면접 = 직업기초역량 + 전공적합성","자기소개서·학업계획서(원서 접수 때 제출)와 학교생활기록부를 바탕으로 질문","본교 특별교육과정 이수자 전형: 포트폴리오 50(A4 20쪽·5분 영상) + 교과적합성 면접 50"],"x":[["","자기소개서에 쓴 활동 중 하나를 골라 더 자세히 설명해 보세요.",90]]},{"n":"선일빅데이터고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://bigdata.sen.hs.kr/","d":[["웹툰일러스트과",40],["방송미디어과",36],["빅데이터마케팅과",36],["쇼핑라이브과",18]],"cm":"","sp":["우수인재 전형"],"sc":[30,10,60],"iv":["여학생 모집","우수인재 전형: 지원서에 쓴 내용으로 진로개발역량(70점) 평가"],"x":[]},{"n":"선정국제관광고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://sjt.sen.hs.kr/","d":[["호텔항공관광과",54],["관광콘텐츠과",18],["간호과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["서비스캠프·입학설명회 참가 횟수에 따라 심층면접 가산점"],"x":[]},{"n":"성동공업고등학교","t":"S","r":"전국","rn":"","dm":true,"g":"","hp":"http://sdth.sen.hs.kr/","d":[["소방안전기계과",40],["소방시설관리과",40],["소방전기과",40],["소방모빌리티과",20],["도시건축디자인과",20],["패션주얼리디자인과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["소방 분야 특화 학과(소방안전기계·소방시설관리·소방전기·소방모빌리티)","기숙사 있음"],"x":[]},{"n":"성동글로벌경영고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://sdglobal.sen.hs.kr","d":[["반려동물케어과",40],["세무행정과",20],["문화콘텐츠디자인과",40],["패션디자인과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 60(실기평가 없음)"],"x":[]},{"n":"성암국제무역고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://seongam.sen.hs.kr","d":[["미주무역과",36],["중국무역과",20],["일본무역과",40],["국제문화콘텐츠과",36]],"cm":"","sp":["성실인재 특별전형"],"sc":[30,10,60],"iv":["면접: 학교생활기록부를 활용한 지원동기·인성·태도 종합평가","국제문화콘텐츠과는 실기 + 면접(웹툰·영상 기본 소양)","미리성암캠프·입학설명회 참가 가산점, 성실인재 특별전형 운영"],"x":[]},{"n":"세그루패션디자인고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://sfd.sen.hs.kr/","d":[["뷰티패션과",40],["미디어디자인과",36],["패션제품디자인과",40],["의상패션과",36]],"cm":"","sp":[],"sc":[30,10,60],"iv":["여학생 모집, 심층면접 60"],"x":[]},{"n":"세명컴퓨터고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://smc.sen.hs.kr","d":[["스마트보안솔루션과",36],["모빌리티메이커과",36],["인공지능소프트웨어과",18],["게임소프트웨어과",18],["AI미디어테크과",36],["AI스포츠테크과",18]],"cm":"","sp":[],"sc":[20,10,70],"iv":["심층면접 70","SW 진로체험·여름방학 진로캠프 이수 가산점"],"x":[]},{"n":"송곡관광고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"http://sgi.hs.kr","d":[["조리과학과",40],["카페디저트과",40],["호텔관광과",20]],"cm":"","sp":["담임교사 추천전형","담임추천 특별전형"],"sc":[30,10,60],"iv":["담임교사 추천 특별전형(1개 학과, 교과 성적 반영) 운영"],"x":[]},{"n":"신진과학기술고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"https://shinjin.hs.kr","d":[["미래자동차과",40],["스마트건설과",40],["인공지능자동화과",20],["호텔조리과",40],["호텔디저트경영과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 평가 내용: 지망 학과 기초 소양, 지원동기(준비와 태도·적극성), 인성(근면 성실), 태도(취업 의지)","입학설명회·진로체험 참여 횟수 반영"],"x":[["","지원 학과와 관련해 기초적으로 알고 있는 것을 말해 보세요.",90]]},{"n":"염광메디텍고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://ykm.sen.hs.kr","d":[["메디컬뷰티과",20],["바이오코스메틱과",20],["보건간호과",60]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 = 적합성 평가 50 + 가산점 10(본교 체험·행사·설명회 참가)"],"x":[]},{"n":"영등포공업고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"남","hp":"https://younggong.sen.hs.kr","d":[["공연무대디자인과",40],["스마트전기과",40],["반도체시스템과",20],["스포츠과학시설과",40]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["남학생 모집, 심층면접 60"],"x":[]},{"n":"영락의료과학고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://youngnak-c.sen.hs.kr","d":[["건강과학과",20],["의료비즈니스과",20],["의료미용과",20],["보건간호과",40]],"cm":"","sp":["담임교사 추천 전형"],"sc":[30,10,60],"iv":["전공역량 면접 60","담임교사 추천 전형(건강과학과 제외): 리더십·교내수상 + 전공역량 면접"],"x":[]},{"n":"영신간호비즈니스고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://youngshin.sen.hs.kr/","d":[["스마트의료간호과",60],["보건뷰티과",40],["웰빙베이커리과",40],["스마트영상디자인과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["여학생 모집, 심층면접 60"],"x":[]},{"n":"예림디자인고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"http://yerim.sen.hs.kr","d":[["시각디자인과",40],["콘텐츠디자인과",20],["게임그래픽디자인과",20],["만화애니메이션과",20],["패션스타일리스트과",20]],"cm":"","sp":[],"sc":[20,10,70],"iv":["여학생 모집, 심층면접 70","학과별 과제는 면접 당일 제시"],"x":[]},{"n":"예일디자인고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://yaledesign.sen.hs.kr","d":[["웹콘텐츠디자인과",60],["시각디자인과",40]],"cm":"","sp":["Yale Design Academy 전형"],"sc":null,"iv":["여학생 모집","Yale Design Academy 전형: 입학설명회·디자인 실기대회·진로체험 등 활동 평가"],"x":[]},{"n":"용산철도고등학교","t":"S","r":"전국","rn":"","dm":true,"g":"남","hp":"http://yongsan-th.sen.hs.kr","d":[["철도전기신호과",20],["철도전자통신과",20],["철도건설과",20],["철도운영사무과",20]],"cm":"","sp":[],"sc":[30,10,60],"iv":["남학생 모집, 기숙사(원거리 통학생 우선)","철도 분야 4개 학과"],"x":[]},{"n":"유한공업고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"","hp":"http://yuhan.sen.hs.kr","d":[["스마트제어과",40],["자동화시스템과",40],["로봇전기과",40],["건축디자인과",40]],"cm":"","sp":["글로벌인재 특별전형"],"sc":[30,10,60],"iv":["심층면접 = 학업진로잠재역량 57 + 전공진학탐색역량 3(개방 체험·입학설명회·모의 면접 참여)","글로벌인재 특별전형 운영"],"x":[]},{"n":"은평메디텍고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://eunpyeong.sen.hs.kr/","d":[["e스포츠과",36],["스마트AI과",18],["조리디저트과",36],["보건간호과",40]],"cm":"","sp":["e스포츠 인재 전형"],"sc":[30,10,60],"iv":["심층면접 평가: 전공 적합성, 학업 및 취업 의지, 인성 및 태도","e스포츠 인재 전형: LOL 실기평가"],"x":[["e스포츠과","e스포츠 산업에서 어떤 전문가가 되고 싶나요?",90]]},{"n":"이화여자대학교병설미디어고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://www.ewhamedia.sen.hs.kr","d":[["공통 모집",144]],"cm":"2학년 진급 시 국제경영과·영상콘텐츠과·디자인과로 편성","sp":["학교생활우수자 특별전형"],"sc":[30,10,60],"iv":["여학생 모집, 공통 모집(2학년 때 국제경영·영상콘텐츠·디자인과)","학교생활기록부를 활용한 진로 적합성 면접: 공통 질문(지원동기, 학업 계획) + 서류 질문(인성, 적성)","면접 시간은 개인별 5분 이내","학교생활우수자 특별전형은 면접 없음"],"x":[["","학교생활기록부에서 나를 가장 잘 보여 주는 활동은 무엇인가요?",90]]},{"n":"인덕과학기술고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://induk.sen.hs.kr","d":[["에너지관리시스템과",40],["도시공간디자인과",20],["스마트모빌리티과",40],["캐릭터디자인과",60],["인테리어디자인과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["심층면접 60(실기평가 포함 가능)"],"x":[]},{"n":"일신여자상업고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://ilshin.sen.hs.kr","d":[["금융정보과",36],["회계정보과",36],["디자인콘텐츠과",40],["스마트펫경영과",40]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["여학생 모집","면접 기준: 성실하고 긍정적인 생활 태도, 진로 목표와 의지, 지원학과에 대한 관심·노력·준비","마이스터 캠프·입학설명회 참가 회당 1점(최대 5점)"],"x":[]},{"n":"한강미디어고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"http://hangang-ech.sen.hs.kr/","d":[["방송미디어과",40],["크리에이티브디자인과",36],["사진영상과",40],["웹미디어콘텐츠과",40]],"cm":"","sp":[],"sc":[30,10,60],"iv":["진로체험·진로캠프·입학설명회 참여 가산점"],"x":[]},{"n":"한세사이버보안고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://hansei.sen.hs.kr/","d":[["지능형소프트웨어과",18],["게임디자인과",18],["해킹보안과",36]],"cm":"","sp":[],"sc":[20,20,60],"iv":["비대면(화상) 면접","서류(출결·봉사)로 1.5배수 선발 후 심층면접"],"x":[]},{"n":"한양과학기술고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"","hp":"https://hanyang.sen.hs.kr","d":[["스마트건설정보과",40],["디지털건축과",40],["스마트융합기계과",40],["스마트전자과",40],["친환경자동차과",40]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["심층면접 60"],"x":[]},{"n":"해성국제컨벤션고등학교","t":"S","r":"전국","rn":"","dm":false,"g":"여","hp":"https://haesung.sen.hs.kr/","d":[["컨벤션경영과",36],["항공호텔과",36],["방송공연과",40]],"cm":"","sp":["해성인재 전형"],"sc":[20,20,60],"iv":["여학생 모집","방송공연과: 2분 내외 실기(노래·연기·댄스) 후 지원동기·전공 소양 면접","해성인재 전형: 자기소개서 평가, 해성캠프·진로체험 가산점"],"x":[["방송공연과","실기를 마친 뒤 받을 수 있는 질문: 방송공연과에 지원한 동기는 무엇인가요?",60]]},{"n":"홍익디자인고등학교","t":"S","r":"서울특별시·인천광역시·경기도","rn":"","dm":false,"g":"여","hp":"https://hid.sen.hs.kr","d":[["시각디자인과",60],["영상애니메이션과",40]],"cm":"","sp":["체육특기자 전형"],"sc":[30,10,60],"iv":["여학생 모집","수요·토요 진로체험, 입학설명회 참가 가산점"],"x":[]}];
+const FIELDS=[
+ {id:"it",name:"IT·소프트웨어",re:/소프트웨어|컴퓨|인공지능|AI|정보|보안|해킹|게임|빅데이터|IT|사물인터넷|e스포츠|SW|메타버스|웹크리에이터|웹콘텐츠|스마트웹|공통 모집|게임융합/,
+  q:[["{학과}에서 가장 배우고 싶은 기술은 무엇이고, 그 이유는 무엇인가요?","관심 분야를 <strong>구체적인 기술 이름</strong>까지 알아봤는지 봐요. 코딩, 인공지능, 보안처럼 범위를 좁혀서 말하면 좋아요.",["코딩","인공지능","보안","게임 개발","앱 만들기","데이터","로봇"],["배우고 싶은 기술 한 가지","그 기술에 관심을 갖게 된 경험(직접 해 본 것)","입학 후 그 기술로 해 보고 싶은 프로젝트"]],
+     ["직접 프로그램을 만들거나 디지털 도구로 무언가를 해 본 경험이 있나요?","<strong>스스로 해 본 경험</strong>이 있는지 봐요. 블록 코딩, 수업 과제, 영상 강의 따라 하기도 충분한 경험이에요.",["블록 코딩","파이썬","정보 수업","영상 강의","동아리","대회"],["그 경험에서 배운 점 한 문장","무엇을, 어떻게 만들었는지","더 배우고 싶은 것"]]]},
+ {id:"design",name:"디자인·웹툰",re:/디자인|웹툰|만화|애니|아트|캐릭터|일러스트|그래픽|패션|주얼리|액세서리|스타일/,
+  q:[["디자인(작품)을 할 때 가장 중요하게 생각하는 것은 무엇인가요?","<strong>나만의 기준</strong>이 있는지 봐요. 보는 사람, 아이디어, 완성도 중 무엇을 중요하게 생각하는지 내 작품 경험과 연결해요.",["보는 사람","아이디어","색감","완성도","꾸준한 연습","관찰"],["내가 중요하게 생각하는 기준","그 기준을 지켜 만든 작품 이야기","입학 후 키우고 싶은 실력"]],
+     ["최근 인상 깊게 본 디자인이나 작품이 있다면 소개해 주세요.","평소 <strong>관찰하고 관심을 갖는 습관</strong>을 봐요. 무엇이 좋았는지 이유를 구체적으로 말하는 게 핵심이에요.",["포스터","웹툰","광고","앱 화면","옷","캐릭터"],["어떤 작품이 왜 인상 깊었는지","언제, 어디서 보고 무엇을 느꼈는지","내 작품에 적용해 보고 싶은 점"]]]},
+ {id:"media",name:"방송·영상·콘텐츠",re:/방송|영상|미디어|콘텐츠|사진|크리에이터|광고|쇼핑라이브|마케팅/,
+  q:[["만들어 보고 싶은 영상이나 콘텐츠가 있다면 소개해 보세요.","<strong>기획력과 관심</strong>을 봐요. 누구에게, 무엇을, 어떻게 보여 줄지 짧게 정리해서 말해요.",["유튜브","브이로그","다큐멘터리","광고","숏폼","라이브"],["만들고 싶은 콘텐츠를 한 문장으로","그 아이디어를 떠올린 계기","입학 후 배워서 만들고 싶은 방법"]],
+     ["콘텐츠를 만드는 사람이 꼭 지켜야 할 책임은 무엇이라고 생각하나요?","<strong>디지털 시민 의식</strong>을 봐요. 저작권, 초상권, 사실 확인 등 하나를 골라 이유와 함께 말해요.",["저작권","초상권","사실 확인","악플 대응","개인정보"],["가장 중요하다고 생각하는 책임","그렇게 생각한 경험이나 사례","내가 콘텐츠를 만들 때 지킬 약속"]]]},
+ {id:"perform",name:"공연·음악·연기",re:/공연|연예|엔터|음악|뮤지컬|연기|K-POP|사운드/,
+  q:[["무대나 실기를 준비하며 꾸준히 연습해 온 과정을 말해 보세요.","<strong>재능보다 노력의 과정</strong>을 봐요. 연습 방법, 힘들었던 점, 나아진 점을 구체적으로 말해요.",["보컬","악기","댄스","연기","연습 일지","레슨"],["내가 연습에서 중요하게 생각하는 것","연습 과정과 힘들었던 순간","입학 후 키우고 싶은 실력"]],
+     ["실기나 공연 중에 실수를 한다면 어떻게 하겠어요?","<strong>위기 대처와 프로 의식</strong>을 봐요. 멈추지 않고 이어가는 태도, 실수 후 돌아보는 습관을 말해요.",["침착함","계속 이어가기","피드백","반복 연습"],["실수에 대한 내 생각","실수했던 경험과 대처","앞으로의 다짐"]]]},
+ {id:"food",name:"조리·제과·카페",re:/조리|외식|베이커리|제과|제빵|디저트|카페|푸드/,
+  q:[["요리(제과)를 할 때 가장 중요하다고 생각하는 것은 무엇인가요?","조리 실습에서는 <strong>위생과 안전</strong>, 정확한 계량과 성실함이 중요해요. 내 경험과 연결해서 말해요.",["위생","안전","정확한 계량","맛","정성","손님 생각"],["가장 중요하다고 생각하는 것","직접 만들어 본 경험에서 느낀 점","실습실에서 지킬 약속"]],
+     ["직접 만들어 본 음식이나 디저트 중 기억에 남는 것을 말해 보세요.","<strong>실제로 해 본 경험</strong>과 그 과정에서 배운 점을 봐요. 실패담도 좋은 답이 될 수 있어요.",["가족 식사","베이킹","실패 경험","레시피 연구","급식 관심"],["그 음식이 나에게 의미 있는 이유","만든 과정과 어려웠던 점","더 배워 보고 싶은 요리"]]]},
+ {id:"tour",name:"관광·호텔·서비스",re:/관광|호텔|항공|컨벤션|서비스|레저/,
+  q:[["좋은 서비스란 무엇이라고 생각하나요?","서비스 분야는 <strong>사람을 대하는 태도</strong>를 중요하게 봐요. 내가 받은(또는 한) 좋은 서비스 경험으로 설명해요.",["친절","배려","미소","정확함","경청"],["좋은 서비스에 대한 내 정의","직접 경험한 좋은(또는 아쉬운) 서비스","내가 실천할 서비스 태도"]],
+     ["불만을 가진 손님을 만나면 어떻게 응대하겠어요?","<strong>상황 대처 능력</strong>을 봐요. 먼저 듣고, 사과하고, 해결 방법을 찾는 순서로 말해요.",["경청","사과","해결 방법","침착함","도움 요청"],["응대할 때 가장 중요한 것","비슷한 상황(갈등)을 해결해 본 경험","실제로 할 응대 순서"]]]},
+ {id:"health",name:"보건·간호·보육",re:/간호|보건|의료|메디컬|건강과학|보육|영유아/,
+  q:[["간호·보건(돌봄) 분야의 일을 하는 사람에게 가장 필요한 자질은 무엇일까요?","<strong>생명과 사람을 대하는 태도</strong>를 봐요. 책임감, 공감, 정확함 중 하나를 골라 경험과 연결해요.",["책임감","공감","정확함","인내","체력","봉사"],["가장 필요하다고 생각하는 자질","그 자질을 보여 준 내 경험","학교에서 그 자질을 키울 방법"]],
+     ["아픈 사람이나 어린아이를 돌보거나 도와준 경험이 있나요?","<strong>돌봄 경험과 그때의 마음</strong>을 봐요. 가족을 돌본 일, 봉사활동도 좋아요.",["가족 돌봄","동생 돌보기","봉사활동","보건실 도우미"],["돌봄에 대한 내 생각","구체적인 경험과 느낀 점","앞으로 되고 싶은 돌봄 전문가"]]]},
+ {id:"beauty",name:"뷰티·미용",re:/뷰티|미용|메이크업|코스메틱/,
+  q:[["뷰티 분야에서 관심 있는 일과 그 이유는 무엇인가요?","관심 분야(헤어, 메이크업, 피부, 네일 등)를 <strong>구체적으로</strong> 알고 있는지 봐요.",["헤어","메이크업","피부 관리","네일","화장품"],["관심 있는 뷰티 분야","관심을 갖게 된 계기","입학 후 도전하고 싶은 자격증이나 기술"]],
+     ["고객을 대할 때 가장 중요하다고 생각하는 것은 무엇인가요?","뷰티 분야는 <strong>고객과의 소통과 위생</strong>이 중요해요.",["소통","위생","고객 취향","친절","정확한 상담"],["고객을 대할 때 중요한 것","그렇게 생각하게 된 경험","내가 실천할 태도"]]]},
+ {id:"biz",name:"경영·금융·무역",re:/금융|경영|회계|세무|무역|행정|비즈니스|스타트업|브랜딩|펫경영/,
+  q:[["경제나 금융, 경영과 관련해 관심 있게 본 것이 있나요?","<strong>분야에 대한 평소 관심</strong>을 봐요. 용돈 관리, 뉴스, 가게 운영 이야기처럼 생활 속 경험도 좋아요.",["용돈 관리","경제 뉴스","창업","마케팅","회계","무역"],["관심 있는 주제 한 가지","관심을 갖게 된 계기나 경험","입학 후 배우고 싶은 것"]],
+     ["정확함과 신뢰가 중요한 일을 맡아 본 경험이 있나요?","금융·사무 분야는 <strong>꼼꼼함과 정직</strong>을 중요하게 봐요.",["반 회계","기록 담당","약속 지키기","꼼꼼함","정직"],["신뢰에 대한 내 생각","맡았던 일과 결과","직업인으로서의 다짐"]]]},
+ {id:"eng",name:"공업·기술·건설",re:/기계|전기|전자|자동차|모빌리티|로봇|반도체|에너지|건축|건설|토목|설비|용접|화공|세라믹|소방|철도|플랜트|드론|자동화|제어|시설|신소재|통신|도시|인테리어|바이오|과학|메이커/,
+  q:[["{학과} 분야에 관심을 갖게 된 계기는 무엇인가요?","<strong>기술 분야에 대한 진짜 관심</strong>을 봐요. 무언가를 분해하고 고쳐 본 경험, 관련 영상이나 체험도 좋아요.",["분해·조립","만들기","고장 고치기","과학 수업","체험 활동","가족 영향"],["관심을 한 문장으로","관심이 시작된 실제 경험","입학 후 다뤄 보고 싶은 장비나 기술"]],
+     ["직접 무언가를 고치거나 만들어 본 경험이 있나요?","<strong>손으로 직접 해 보는 태도</strong>를 봐요. 결과보다 과정에서 문제를 어떻게 해결했는지가 중요해요.",["조립","수리","과학 실험","목공","메이커 활동"],["그 경험이 나에게 준 것","무엇을 어떻게 만들었는지, 어려웠던 점","실습 수업에서 해 보고 싶은 것"]]]},
+ {id:"sports",name:"체육·스포츠",re:/체육|스포츠/,
+  q:[["운동을 꾸준히 해 오며 배운 점은 무엇인가요?","<strong>꾸준함과 자기관리</strong>를 봐요. 기록보다 과정과 태도를 말해요.",["꾸준함","팀워크","체력 관리","부상 극복","규칙"],["운동에서 배운 가장 큰 것","꾸준히 한 운동과 힘들었던 순간","스포츠 분야에서 하고 싶은 일"]]]},
+ {id:"public",name:"공공·경찰·부사관",re:/경찰|부사관|공공/,
+  q:[["공공 분야(경찰·군·행정)에서 일하고 싶은 이유는 무엇인가요?","<strong>봉사 정신과 책임감</strong>을 봐요. 막연한 멋보다 사람들을 돕는 일에 대한 생각을 말해요.",["책임감","봉사","정의","규칙","체력","리더십"],["공공 분야에서 일하고 싶은 이유","그렇게 생각하게 된 경험","입학 후 준비할 것(체력, 자격 등)"]]]},
+ {id:"pet",name:"반려동물",re:/반려|펫/,
+  q:[["반려동물 분야에서 일하는 사람에게 필요한 자세는 무엇일까요?","<strong>생명 존중과 책임감</strong>을 봐요. 반려동물을 돌본 경험이 있으면 연결해요.",["생명 존중","책임감","관찰력","인내","위생"],["가장 필요한 자세","반려동물을 돌보거나 관찰한 경험","하고 싶은 일(미용, 훈련, 케어 등)"]]]}
+];
+function fieldsOf(name){return FIELDS.filter(f=>f.re.test(name));}
+function schoolByName(n){return SCHOOLS.find(s=>s.n===n);}
+const CATS=[
+  {id:"school",name:"지원 학교·학과 맞춤"},
+  {id:"intro",name:"자기소개·지원동기"},
+  {id:"plan",name:"진로·학업 계획"},
+  {id:"life",name:"인성·학교생활"},
+  {id:"job",name:"직업 태도·상황"},
+  {id:"end",name:"마무리"},
+  {id:"mine",name:"내가 추가한 질문"}
+];
+const Q=[
+ {id:"q1",cat:"intro",sec:60,q:"1분 동안 자기소개를 해 주세요.",
+  intent:"면접관은 <strong>내가 어떤 사람인지 한 문장</strong>으로 듣고 싶어 해요. 이름·출신 학교 나열보다, 나를 보여 주는 특징 하나와 그 근거, 그리고 지원 분야와의 연결이 중요해요.",
+  kw:["성실함","끈기","책임감","호기심","배려","도전","손재주","꼼꼼함","밝은 성격"],
+  h:["나를 한 단어(또는 한 문장)로 표현하면?","그 단어를 보여 주는 실제 경험 하나","그 장점을 {학과}에서 어떻게 키울지"]},
+ {id:"q2",cat:"intro",sec:90,q:"{학교}에 지원한 동기는 무엇인가요?",
+  intent:"<strong>왜 하필 이 학교인지</strong>를 확인하는 질문이에요. '집에서 가까워서', '성적에 맞춰서'보다, 이 학교에서만 배울 수 있는 것과 내 관심이 만나는 지점을 말해요.",
+  kw:["진로 체험","학교 설명회","실습 환경","자격증","선배 이야기","취업","관심 분야","동아리"],
+  h:["이 학교를 선택한 가장 큰 이유","이 학교를 알게 되고 관심이 커진 계기","입학해서 꼭 해 보고 싶은 것"]},
+ {id:"q3",cat:"intro",sec:90,q:"여러 학과 중 {학과}를 선택한 이유는 무엇인가요?",
+  intent:"<strong>학과에 대한 관심이 진짜인지</strong> 봐요. 그 분야에 관심을 갖게 된 구체적인 순간이 있으면 가장 설득력 있어요.",
+  kw:["직접 해 본 경험","가족·주변 영향","좋아하는 과목","유튜브·책","진로 검사","체험 활동","만들기","취미"],
+  h:["이 학과를 고른 이유를 한 문장으로","관심이 시작된 실제 경험","이 학과에서 배우고 싶은 것"]},
+ {id:"q4",cat:"intro",sec:90,q:"{학교}에 대해 알고 있는 것을 말해 보세요.",
+  intent:"<strong>지원 전에 얼마나 알아보았는지</strong>, 즉 준비성과 관심을 확인해요. 홈페이지·설명회에서 알게 된 사실 1~2가지를 정확하게 말하면 충분해요.",
+  kw:["교육과정","실습실","자격증","동아리","취업 현황","교훈","학교 행사","기숙사"],
+  h:["이 학교의 가장 큰 특징이라고 생각하는 것","그걸 어떻게 알게 되었는지(설명회, 홈페이지 등)","그 특징을 내가 어떻게 활용하고 싶은지"]},
+ {id:"q5",cat:"plan",sec:90,q:"입학 후 3년 동안의 학업 계획을 말해 보세요.",
+  intent:"<strong>목표를 단계별로 생각해 보았는지</strong> 봐요. 1학년·2학년·3학년처럼 시기별로 나누면 정리돼 보여요.",
+  kw:["기초 다지기","자격증","현장 실습","대회","동아리","기초 학력","취업 준비","진학 준비"],
+  h:["3년 뒤 내가 이루고 싶은 모습","지금까지 공부하거나 준비해 온 방식","1학년, 2학년, 3학년 때 할 일"]},
+ {id:"q6",cat:"plan",sec:90,q:"졸업 후 진로 계획은 어떻게 되나요?",
+  intent:"취업이든 진학이든 <strong>방향이 있는지</strong>를 봐요. 정답은 없지만, 이 학교에서 배운 것과 이어지는 계획이면 좋아요.",
+  kw:["취업","후진학","창업","공무원","전문 기술인","군 특성화","해외 취업","대학 진학"],
+  h:["졸업 후 하고 싶은 일","그 일을 하고 싶게 된 계기","그 목표를 위해 학교에서 준비할 것"]},
+ {id:"q7",cat:"plan",sec:60,q:"고등학교에서 꼭 따고 싶은 자격증과 그 이유는 무엇인가요?",
+  intent:"<strong>학과와 진로를 구체적으로 알아보았는지</strong>를 확인해요. 자격증 이름을 정확히 알고, 왜 필요한지 말할 수 있으면 좋아요.",
+  kw:["기능사","컴퓨터 활용","외국어","학과 관련 자격","취업 준비","전문성","진로 탐색"],
+  h:["따고 싶은 자격증 이름","그 자격증을 알게 된 계기나 필요한 이유","언제, 어떻게 준비할지"]},
+ {id:"q8",cat:"plan",sec:90,q:"지원 분야와 관련해 지금까지 준비하거나 경험해 본 것이 있나요?",
+  intent:"<strong>말뿐이 아닌 실제 노력</strong>을 보고 싶어 해요. 거창하지 않아도 돼요. 혼자 찾아본 영상, 집에서 해 본 일, 체험 활동도 훌륭한 답이에요.",
+  kw:["진로 체험","방과후 활동","동아리","독서","영상 강의","집에서 해 본 일","대회 참가","자유학기 활동"],
+  h:["준비해 온 것을 한 문장으로","그중 가장 기억에 남는 활동과 배운 점","입학 후 더 깊이 해 보고 싶은 것"]},
+ {id:"q9",cat:"plan",sec:60,q:"10년 후 나는 어떤 모습일까요?",
+  intent:"<strong>꿈을 구체적으로 상상해 보았는지</strong> 봐요. 직업 이름보다 '어떤 일을 하며 어떤 사람으로 일하고 있을지'를 그려 보세요.",
+  kw:["전문가","현장 리더","후배 가르치기","내 가게","해외","자격증","꾸준함","사회에 도움"],
+  h:["10년 후 내 모습 한 장면","그 모습을 꿈꾸게 된 이유","그 모습에 가까워지기 위한 첫걸음"]},
+ {id:"q10",cat:"life",sec:90,q:"중학교 생활 중 가장 기억에 남는 경험은 무엇인가요?",
+  intent:"경험 자체보다 <strong>그 경험에서 무엇을 느끼고 배웠는지</strong>가 핵심이에요. 배운 점이 지원 학과나 학교생활과 이어지면 더 좋아요.",
+  kw:["체육대회","축제","수행평가","모둠 활동","봉사","동아리","학급 임원","현장 체험"],
+  h:["그 경험이 내게 남긴 것 한 문장","언제, 무엇을, 어떻게 했는지","그 배움을 고등학교에서 어떻게 이어갈지"]},
+ {id:"q11",cat:"life",sec:90,q:"본인의 장점과 단점을 말해 보세요.",
+  intent:"<strong>나를 객관적으로 볼 줄 아는지</strong> 확인해요. 단점은 솔직하게 말하되, 고치려고 노력하는 방법을 꼭 함께 말해요.",
+  kw:["성실함","책임감","배려","끈기","급한 성격","걱정이 많음","거절을 못 함","꼼꼼함"],
+  h:["내 장점 하나와 단점 하나","장점이 드러난 경험, 단점을 고치려 한 경험","앞으로 장점은 살리고 단점은 어떻게 고칠지"]},
+ {id:"q12",cat:"life",sec:90,q:"친구와 갈등이 생겼을 때 어떻게 해결했나요?",
+  intent:"<strong>다른 사람과 함께 지내는 방법</strong>을 봐요. 누가 잘못했는지보다, 내가 어떤 행동으로 관계를 풀었는지가 중요해요.",
+  kw:["먼저 사과","대화","입장 바꿔 생각","선생님께 도움","약속 정하기","기다리기"],
+  h:["갈등을 풀 때 내가 중요하게 생각하는 것","실제 있었던 일과 내가 한 행동","고등학교 단체생활에서 어떻게 할지"]},
+ {id:"q13",cat:"life",sec:90,q:"모둠 활동이나 단체 활동에서 맡았던 역할은 무엇인가요?",
+  intent:"<strong>협업 능력과 책임감</strong>을 봐요. 실습은 대부분 팀으로 해요. 리더가 아니어도 자료 조사, 기록, 분위기 만들기 모두 중요한 역할이에요.",
+  kw:["리더","자료 조사","기록","발표","의견 조율","마무리 정리","분위기 메이커","도우미"],
+  h:["팀에서 나는 주로 어떤 역할을 하는 사람인지","실제로 맡았던 역할과 그 결과","실습 수업에서 어떤 팀원이 되고 싶은지"]},
+ {id:"q14",cat:"life",sec:90,q:"어려운 일을 포기하지 않고 끝까지 해낸 경험이 있나요?",
+  intent:"<strong>끈기와 문제 해결 방법</strong>을 봐요. 어려웠던 점 → 내가 한 노력 → 결과와 배운 점 순서로 말하면 잘 들려요.",
+  kw:["공부","운동","악기","자격증","대회 준비","습관 만들기","체력","만들기"],
+  h:["끝까지 해내는 힘에 대한 내 생각","어려웠던 상황과 내가 한 구체적인 노력","그 경험을 고등학교에서 어떻게 살릴지"]},
+ {id:"q15",cat:"life",sec:60,q:"봉사활동이나 다른 사람을 도운 경험을 말해 보세요.",
+  intent:"<strong>배려와 공동체 의식</strong>을 확인해요. 봉사 시간보다, 도우면서 느낀 점이 진심으로 들리는 게 중요해요.",
+  kw:["학교 봉사","지역 봉사","친구 공부 돕기","가족 돕기","환경 정화","재능 나눔"],
+  h:["다른 사람을 돕는다는 것에 대한 내 생각","실제로 도왔던 경험과 느낀 점","앞으로 내 기술로 할 수 있는 나눔"]},
+ {id:"q16",cat:"job",sec:90,q:"좋은 직업인(기술인)이 갖춰야 할 자세는 무엇이라고 생각하나요?",
+  intent:"<strong>일에 대한 태도</strong>를 봐요. 성실, 책임감, 안전 의식, 꾸준한 배움 중 하나를 골라 내 경험과 연결해요.",
+  kw:["성실함","책임감","안전 의식","시간 약속","꾸준한 배움","협동","정직","고객 배려"],
+  h:["가장 중요하다고 생각하는 자세 하나","그렇게 생각하게 된 경험이나 본보기","그 자세를 학교에서 어떻게 기를지"]},
+ {id:"q17",cat:"job",sec:60,q:"실습할 때 안전수칙을 지키는 것이 왜 중요할까요?",
+  intent:"특성화고·마이스터고는 실습이 많아서 <strong>안전 의식</strong>을 자주 물어요. 나와 동료를 함께 지키는 일이라는 점을 말해요.",
+  kw:["나를 지키기","동료 안전","보호구","정리정돈","설명 잘 듣기","장비 점검"],
+  h:["안전수칙이 중요한 이유 한 문장","규칙을 지켜서 다치지 않았던(또는 위험했던) 경험","실습실에서 내가 지킬 약속"]},
+ {id:"q18",cat:"job",sec:90,q:"학과 공부나 실습이 생각보다 어렵고 힘들다면 어떻게 하겠어요?",
+  intent:"<strong>어려움 앞에서의 태도</strong>를 봐요. 포기하지 않겠다는 말에 그치지 말고 구체적인 방법(질문하기, 반복 연습, 친구와 공부)을 말해요.",
+  kw:["선생님께 질문","반복 연습","친구와 함께","복습","계획 세우기","처음 마음 떠올리기"],
+  h:["힘들 때 내가 쓰는 방법","예전에 어려움을 이겨 낸 경험","입학 후 실제로 해 볼 방법"]},
+ {id:"q19",cat:"job",sec:60,q:"단체생활에서 규칙을 지키지 않는 친구가 있다면 어떻게 하겠어요?",
+  intent:"<strong>공동체 규칙에 대한 생각과 소통 방식</strong>을 봐요. 무조건 고자질도, 모른 척도 아닌, 친구를 존중하며 함께 지키는 방법을 말해요.",
+  kw:["먼저 대화","이유 들어 보기","함께 지키자고 권하기","선생님과 상의","내가 먼저 모범"],
+  h:["규칙이 왜 필요한지에 대한 내 생각","비슷한 상황에서 내가 했던 행동","고등학교에서 어떻게 할지"]},
+ {id:"q20",cat:"job",sec:60,q:"출결이나 생활 태도에서 스스로 노력한 점이 있나요?",
+  intent:"<strong>성실함을 행동으로 보여 줄 수 있는지</strong> 확인해요. 지각하지 않으려 한 습관, 준비물 챙기기 같은 작은 노력도 좋아요.",
+  kw:["무지각","일찍 일어나기","준비물 챙기기","과제 제출","인사","시간 관리"],
+  h:["내가 생각하는 성실함","실제로 지켜 온 습관 하나","고등학교에서도 이어갈 약속"]},
+ {id:"q21",cat:"end",sec:90,q:"지원 분야와 관련해 최근 관심 있게 본 뉴스나 이야기가 있나요?",
+  intent:"<strong>분야에 대한 관심을 평소에도 갖고 있는지</strong> 봐요. 뉴스 내용 요약 + 내 생각 + 배우고 싶은 점 순서로 짧게 말해요.",
+  kw:["새로운 기술","인공지능","환경","안전","산업 소식","유명 인물","지역 소식"],
+  h:["그 이야기에 대한 내 생각","어떤 내용이었는지 짧게","그 분야에서 내가 배우고 싶은 것"]},
+ {id:"q22",cat:"end",sec:60,q:"마지막으로 하고 싶은 말이 있나요?",
+  intent:"면접의 <strong>마지막 인상</strong>을 남기는 기회예요. 앞에서 못 한 말이나 각오를 짧고 또렷하게, 감사 인사로 마무리해요.",
+  kw:["각오","감사","못 한 이야기","다시 한번 지원 동기","약속"],
+  h:["가장 전하고 싶은 한 마디","그 말을 뒷받침하는 짧은 근거","입학 후 각오와 감사 인사"]}
+];
+const BUILD_CHECKS=["질문에 맞는 결론을 먼저 말했나요?","실제로 있었던 일(경험)이 하나 들어갔나요?","과장하거나 외운 티가 나는 표현은 없나요?","정해진 시간 안에 말할 수 있나요?","'~습니다'로 또렷하게 끝맺었나요?"];
+const MOCK_CHECKS=["말이 너무 빠르지 않았나요?","내 경험이 잘 들렸나요?","끝맺음이 분명했나요?","'음…', '그…' 같은 군말이 적었나요?","면접관(카메라)을 보며 말했나요?"];
+const DAY_CHECKS=["수험표, 학생증(신분증) 챙기기","면접 장소와 시간, 가는 길 다시 확인","교복 단정히 준비하기(이름표 등 블라인드 기준 확인)","제출한 자기소개서·서류 다시 읽기","답변 노트를 한 번 소리 내어 읽기","휴대폰 충전, 알람 맞추고 일찍 자기"];
+
+const KEY="myInterviewPractice.v1";
+let S={profile:{school:"",major:""},answers:{},custom:[],day:{},practice:0,mockSec:{}};
+try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);S=Object.assign(S,o);}}catch(e){}
+let saveT=null;
+function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}},250);}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function hashId(t){let h=0;for(let i=0;i<t.length;i++){h=(h*31+t.charCodeAt(i))|0;}return "s"+(h>>>0).toString(36);}
+function schoolQ(){
+  const sel=S.sel||{};const sc=sel.school?schoolByName(sel.school):null;if(!sc)return[];
+  const list=[];const major=sel.major||"";
+  (sc.x||[]).forEach(([dept,q,sec])=>{if(dept&&major&&dept!==major)return;if(dept&&!major)return;
+    list.push({cat:"school",sec:sec||90,q,intent:"요강에 나온 <strong>이 학교의 면접 방식</strong>을 바탕으로 만든 연습 질문이에요. 실제 문항은 다를 수 있으니 형식에 익숙해지는 데 집중하세요.",kw:["지원동기","경험","준비 과정","계획"],h:["질문에 대한 내 결론","뒷받침하는 경험이나 준비","입학 후 계획"]});});
+  const fs=fieldsOf(major);const used=new Set();
+  fs.slice(0,2).forEach(f=>f.q.forEach(([q,intent,kw,h])=>{if(used.has(q))return;used.add(q);list.push({cat:"school",sec:90,q,intent,kw,h});}));
+  if(sc.t==="M")list.push({cat:"school",sec:90,q:"마이스터고는 졸업 후 취업을 목표로 해요. 취업한 뒤 어떤 기술인으로 성장하고 싶나요?",intent:"마이스터고는 <strong>취업 후 성장 경로(후진학 포함)</strong>에 대한 생각을 중요하게 봐요.",kw:["취업","후진학","자격증","현장 경험","명장"],h:["취업 후 되고 싶은 기술인","그 목표를 갖게 된 계기","학교에서 준비할 단계"]});
+  if(sc.dm)list.push({cat:"school",sec:60,q:"기숙사에서 생활하게 된다면 어떤 점을 가장 신경 쓰겠어요?",intent:"기숙사가 있는 학교는 <strong>단체생활 태도와 자기관리</strong>를 물어볼 수 있어요.",kw:["규칙","시간 관리","배려","청결","자기주도 학습"],h:["단체생활에서 가장 중요한 것","가족이나 단체 활동에서 해 본 경험","기숙사에서 지킬 약속"]});
+  if(sc.iv.join(" ").includes("포트폴리오"))list.push({cat:"school",sec:90,q:"포트폴리오에 담은 작품 중 가장 자신 있는 것을 소개해 보세요.",intent:"이 학교는 <strong>포트폴리오</strong>를 받거나 참고하는 전형이 있어요. 작품의 의도, 과정, 아쉬운 점을 말할 수 있게 준비해요.",kw:["작품 의도","제작 과정","아쉬운 점","다음 목표"],h:["이 작품으로 보여 주고 싶은 나","만든 과정과 어려웠던 점","다음에 만들고 싶은 작품"]});
+  return list.map(o=>Object.assign(o,{id:hashId(sc.n+"|"+o.q)}));
+}
+function allQ(){return schoolQ().concat(Q).concat(S.custom.map(c=>({id:c.id,cat:"mine",sec:90,q:c.q,custom:true,
+  intent:"내가 직접 추가한 질문이에요. <strong>이 질문으로 면접관이 무엇을 알고 싶어 할지</strong> 먼저 한 줄로 생각해 보고, 생각 → 경험 → 계획 순서로 정리해 보세요.",
+  kw:["성실함","책임감","도전","배려","끈기","관심 분야"],h:["질문에 대한 내 결론","그렇게 말할 수 있는 실제 경험","앞으로의 계획"]})));}
+function fill(t){
+  const sc=S.profile.school.trim(), mj=S.profile.major.trim();
+  return t.replace(/\{학교\}/g, sc||"우리 학교").replace(/\{학과\}/g, mj||"이 학과");
+}
+function ans(id){return S.answers[id]||(S.answers[id]={keys:[],extra:[],t:"",e:"",p:"",full:"",edited:false,checks:{},mchecks:{},practiced:0});}
+function joined(a){return [a.t,a.e,a.p].map(s=>s.trim()).filter(Boolean).join(" ");}
+function status(id){const a=S.answers[id];if(!a)return"";if(a.full.trim().length>=20)return"done";if(a.t||a.e||a.p||a.full)return"part";return"";}
+function toast(msg){const t=$("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2200);}
+
+/* ---------- 탭 ---------- */
+const tabs=["find","build","mock","tips","note"];
+function showTab(name){
+  tabs.forEach(n=>{$("tab-"+n).setAttribute("aria-selected",n===name);$("p-"+n).hidden=n!==name;});
+  if(name==="mock")renderMock();
+  if(name==="note")renderNote();
+  if(name==="find")renderFinder();
+  if(name!=="mock"){stopTimer();stopRec(false);}
+  try{localStorage.setItem(KEY+".tab",name);}catch(e){}
+}
+tabs.forEach(n=>$("tab-"+n).addEventListener("click",()=>showTab(n)));
+document.querySelector(".tabs").addEventListener("keydown",e=>{
+  if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;
+  const i=tabs.findIndex(n=>$("tab-"+n).getAttribute("aria-selected")==="true");
+  const j=(i+(e.key==="ArrowRight"?1:-1)+tabs.length)%tabs.length;showTab(tabs[j]);$("tab-"+tabs[j]).focus();
+});
+
+/* ---------- 프로필 ---------- */
+$("pfSchool").value=S.profile.school;$("pfMajor").value=S.profile.major;
+["pfSchool","pfMajor"].forEach(id=>$(id).addEventListener("input",()=>{
+  S.profile.school=$("pfSchool").value;S.profile.major=$("pfMajor").value;
+  if(S.sel&&(S.sel.school!==S.profile.school||S.sel.major!==S.profile.major))S.sel=null;
+  save();renderFilters();renderList();renderBuildHead();renderMyBox();
+}));
+
+function renderMyBox(){
+  const sel=S.sel||{};const sc=sel.school&&S.profile.school===sel.school?schoolByName(sel.school):null;
+  $("myBox").hidden=!sc;if(!sc)return;
+  $("myBoxT").textContent=sc.n+(sel.major?" · "+sel.major:"")+" 면접 포인트";
+  const L=$("myBoxL");L.innerHTML="";
+  const items=[];if(sc.sc)items.push("특별전형 반영: 출결 "+sc.sc[0]+" + 봉사 "+sc.sc[1]+" + 면접 관련 "+sc.sc[2]+" (100점)");
+  items.concat(sc.iv).forEach(t=>{const li=document.createElement("li");li.textContent=t;L.appendChild(li);});
+}
+$("goFinder").onclick=()=>showTab("find");
+
+/* ---------- 학교 찾기 ---------- */
+const FS={q:"",type:"all",field:"",gender:"any",dorm:false,cur:null,major:""};
+function segChips(boxId,opts,key){const box=$(boxId);box.className="frow";box.innerHTML="";
+  opts.forEach(([v,label])=>{const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=label;b.setAttribute("aria-pressed",FS[key]===v);
+    b.onclick=()=>{FS[key]=(key==="field"&&FS[key]===v)?"":v;renderFinder();};box.appendChild(b);});}
+function schoolFields(sc){const set=new Set();sc.d.forEach(([dn])=>fieldsOf(dn).forEach(f=>set.add(f.id)));return set;}
+function filtered(){
+  const q=FS.q.trim().replace(/\s+/g,"");
+  return SCHOOLS.filter(sc=>{
+    if(FS.type!=="all"&&sc.t!==FS.type)return false;
+    if(FS.dorm&&!sc.dm)return false;
+    if(FS.gender==="m"&&sc.g==="여")return false;
+    if(FS.gender==="f"&&sc.g==="남")return false;
+    if(FS.field&&!schoolFields(sc).has(FS.field))return false;
+    if(q){const hay=(sc.n+sc.d.map(d=>d[0]).join("")+(sc.cm||"")+sc.sp.join("")).replace(/\s+/g,"");if(!hay.includes(q))return false;}
+    return true;});
+}
+function shortName(n){return n.replace(/고등학교$/,"고");}
+function renderFinder(){
+  segChips("fType",[["all","전체"],["M","마이스터고"],["S","특성화고"]],"type");
+  segChips("fField",FIELDS.map(f=>[f.id,f.name]),"field");
+  segChips("fGender",[["any","성별 무관"],["m","남학생 지원 가능"],["f","여학생 지원 가능"]],"gender");
+  $("fDorm").setAttribute("aria-pressed",FS.dorm);
+  const list=filtered();const box=$("sList");box.innerHTML="";
+  $("fSum").innerHTML="서울 <b>"+SCHOOLS.length+"</b>개교 중 <b>"+list.length+"</b>개교"+(FS.field&&FS.field?" · 분야 '"+esc(FIELDS.find(f=>f.id===FS.field).name)+"'":"");
+  if(!list.length){box.innerHTML='<p class="empty">조건에 맞는 학교가 없어요. 검색어나 조건을 줄여 보세요.</p>';}
+  list.forEach(sc=>{
+    const b=document.createElement("button");b.type="button";b.className="scard";if(FS.cur===sc.n)b.setAttribute("aria-current","true");
+    const tags=[`<span class="tag ${sc.t==="M"?"m":"s"}">${sc.t==="M"?"마이스터고":"특성화고"}</span>`];
+    if(sc.g)tags.push(`<span class="tag w">${sc.g}학생만</span>`);if(sc.dm)tags.push('<span class="tag w">기숙사</span>');
+    const dn=sc.d.map(d=>d[0]);
+    b.innerHTML=`<span class="tags">${tags.join("")}</span><span class="nm">${esc(sc.n)}</span><span class="facts">${esc(dn.slice(0,4).join(" · "))}${dn.length>4?" 외 "+(dn.length-4)+"개":""}</span><span class="facts">모집 지역: ${esc(sc.r||"-")}</span>`;
+    b.onclick=()=>{FS.cur=sc.n;const sel=S.sel||{};FS.major=(sel.school===sc.n&&sel.major)?sel.major:(sc.d.length===1?sc.d[0][0]:"");renderFinder();
+      if(window.matchMedia("(max-width:860px)").matches)$("sDetail").scrollIntoView({behavior:"smooth",block:"start"});};
+    box.appendChild(b);
+  });
+  renderDetail();
+}
+function renderDetail(){
+  const box=$("sDetail");const sc=FS.cur?schoolByName(FS.cur):null;
+  box.classList.toggle("is-empty",!sc);
+  if(!sc){box.innerHTML='<h2>학교를 골라 보세요</h2><p class="note">왼쪽 목록에서 학교를 누르면 학과, 모집 지역, 기숙사, 면접 방식이 보여요. 학과까지 고르면 그 학과에 맞는 연습 질문이 답변 만들기에 추가돼요.</p><ul class="points"><li>분야 버튼으로 관심 분야 학교만 볼 수 있어요.</li><li>학교 이름이나 학과 이름으로 검색할 수 있어요.</li></ul>';return;}
+  const fs=new Set();sc.d.forEach(([dn])=>fieldsOf(dn).forEach(f=>fs.add(f.name)));
+  let h=`<div class="tags"><span class="tag ${sc.t==="M"?"m":"s"}">${sc.t==="M"?"마이스터고":"특성화고"}</span>${[...fs].slice(0,3).map(x=>`<span class="tag">${esc(x)}</span>`).join("")}</div>
+  <h2>${esc(sc.n)}</h2>
+  <dl class="kv"><dt>지원 대상</dt><dd>${sc.g?sc.g+"학생만 지원 가능":"남녀 모두"}</dd>
+  <dt>모집 지역</dt><dd>${esc(sc.r||"-")}${sc.rn?`<br><span class="note">${esc(sc.rn)}</span>`:""}</dd>
+  <dt>기숙사</dt><dd>${sc.dm?"있음":"없음 (통학 거리 고려)"}</dd>
+  ${sc.sp.length?`<dt>특별전형</dt><dd>${sc.sp.map(esc).join(", ")}</dd>`:""}</dl>
+  <div><h3>지원 학과 고르기</h3><div class="depts" role="radiogroup" aria-label="지원 학과">${sc.d.map(([dn,cap],i)=>`<label><input type="radio" name="dpick" value="${esc(dn)}" ${FS.major===dn?"checked":""}> ${esc(dn)}<span class="cap">${cap}명</span></label>`).join("")}</div>
+  ${sc.cm?`<p class="note">${esc(sc.cm)}</p>`:""}</div>`;
+  if(sc.sc){const [a,b,c]=sc.sc;h+=`<div><h3>미래인재 특별전형 반영 비율</h3><div class="scorebar" aria-label="출결 ${a}점, 봉사 ${b}점, 면접 관련 ${c}점"><span class="a" style="width:${a}%">출결 ${a}</span><span class="b" style="width:${b}%">${b>=15?"봉사 ":""}${b}</span><span class="c" style="width:${c}%">면접 관련 ${c}</span></div><p class="src">면접 관련 점수에는 학교에 따라 실기, 진로체험, 적성검사가 함께 포함돼요.</p></div>`;}
+  h+=`<div><h3>면접 포인트 (요강 요약)</h3><ul class="points">${sc.iv.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`;
+  h+=`<div class="row"><button class="btn primary" type="button" id="useSchool" ${FS.major?"":"disabled"}>이 학교·학과로 면접 준비하기</button>${sc.hp?`<a class="btn ghost" href="${esc(sc.hp)}" target="_blank" rel="noopener">학교 홈페이지 ↗</a>`:`<span class="note">요강에 홈페이지 주소가 없어요. 학교 이름으로 검색해 보세요.</span>`}</div>
+  ${FS.major?"":'<p class="note">학과를 고르면 준비를 시작할 수 있어요.</p>'}`;
+  box.innerHTML=h;
+  box.querySelectorAll('input[name="dpick"]').forEach(r=>r.onchange=()=>{FS.major=r.value;renderDetail();});
+  const u=$("useSchool");if(u)u.onclick=()=>{
+    S.sel={school:sc.n,major:FS.major};S.profile.school=sc.n;S.profile.major=FS.major;$("pfSchool").value=sc.n;$("pfMajor").value=FS.major;save();
+    filter="all";const sq=schoolQ();cur=sq.length?sq[0].id:"q1";renderFilters();renderBuild();showTab("build");toast(shortName(sc.n)+" "+FS.major+" 맞춤 질문 "+sq.length+"개를 추가했어요");};
+}
+$("fq").addEventListener("input",()=>{FS.q=$("fq").value;renderFinder();});
+$("fDorm").onclick=()=>{FS.dorm=!FS.dorm;renderFinder();};
+
+/* ---------- 진행 ---------- */
+function renderProgress(){
+  const qs=allQ();const d=qs.filter(q=>status(q.id)==="done").length;
+  $("pgDone").textContent=d;$("pgTotal").textContent=qs.length;$("pgBar").style.width=(qs.length?d/qs.length*100:0)+"%";
+  $("pgPractice").textContent=S.practice||0;
+}
+
+/* ---------- 답변 만들기 ---------- */
+let filter="all";let cur="q1";
+function renderFilters(){
+  const f=$("filters");f.innerHTML="";
+  [{id:"all",name:"전체"}].concat(CATS.filter(c=>(c.id!=="mine"||S.custom.length)&&(c.id!=="school"||schoolQ().length))).forEach(c=>{
+    const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=c.name;b.setAttribute("aria-pressed",filter===c.id);
+    b.onclick=()=>{filter=c.id;renderFilters();renderList();};f.appendChild(b);
+  });
+}
+function renderList(){
+  const box=$("qItems");box.innerHTML="";const qs=allQ();let n=0;
+  CATS.forEach(c=>{
+    const items=qs.filter(q=>q.cat===c.id);if(!items.length)return;
+    items.forEach(q=>{q._n=++n;});
+    if(filter!=="all"&&filter!==c.id)return;
+    const h=document.createElement("div");h.className="cat-h";h.textContent=c.name;box.appendChild(h);
+    items.forEach(q=>{
+      const b=document.createElement("button");b.type="button";b.className="qbtn";if(q.id===cur)b.setAttribute("aria-current","true");
+      const st=status(q.id);
+      b.innerHTML=`<span class="n">${String(q._n).padStart(2,"0")}</span><span>${esc(fill(q.q))}</span><span class="dot ${st}" title="${st==="done"?"작성 완료":st==="part"?"작성 중":"아직 안 씀"}"></span>`;
+      b.onclick=()=>{cur=q.id;renderBuild();if(window.matchMedia("(max-width:860px)").matches)document.querySelector(".work").scrollIntoView({behavior:"smooth",block:"start"});};
+      box.appendChild(b);
+    });
+  });
+  renderProgress();
+}
+function getQ(id){return allQ().find(q=>q.id===id)||allQ()[0];}
+function renderBuildHead(){
+  const q=getQ(cur);
+  $("bCat").textContent=(CATS.find(c=>c.id===q.cat)||{}).name;
+  $("bTime").textContent="권장 "+(q.sec>=60?(q.sec/60%1?q.sec+"초":q.sec/60+"분"):q.sec+"초")+" 이내";
+  $("bQ").textContent=fill(q.q);
+  $("bIntent").innerHTML=q.intent;
+  $("hT").textContent="· "+fill(q.h[0]);$("hE").textContent="· "+fill(q.h[1]);$("hP").textContent="· "+fill(q.h[2]);
+}
+function renderKw(){
+  const q=getQ(cur),a=ans(cur);const box=$("bKw");box.innerHTML="";
+  q.kw.concat(a.extra.filter(k=>!q.kw.includes(k))).forEach(k=>{
+    const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=k;b.setAttribute("aria-pressed",a.keys.includes(k));
+    b.onclick=()=>{const i=a.keys.indexOf(k);i>=0?a.keys.splice(i,1):a.keys.push(k);save();renderKw();};
+    box.appendChild(b);
+  });
+}
+function renderChecks(boxId,list,store){
+  const box=$(boxId);box.innerHTML="";
+  list.forEach((t,i)=>{
+    const id=boxId+"_"+i;const l=document.createElement("label");l.setAttribute("for",id);
+    const c=document.createElement("input");c.type="checkbox";c.id=id;c.checked=!!store[i];
+    c.onchange=()=>{store[i]=c.checked;save();};
+    l.appendChild(c);l.appendChild(document.createTextNode(t));box.appendChild(l);
+  });
+}
+function updateStats(){
+  const a=ans(cur),q=getQ(cur);const n=a.full.replace(/\s/g,"").length;
+  const sec=Math.round(n/5.5);
+  $("cChars").textContent=n;$("cSec").textContent=sec;
+  let adv="";
+  if(n===0)adv="";else if(sec>q.sec+10)adv="권장 시간보다 길어요. 핵심만 남겨 볼까요?";else if(sec<q.sec*0.35)adv="조금 짧아요. 경험을 한 문장 더 구체적으로!";else adv="길이가 적당해요.";
+  $("cAdvice").textContent=adv;
+  $("fullState").textContent=a.edited?"직접 고친 답변이에요. 위 세 칸을 바꿔도 덮어쓰지 않아요.":"세 문장을 쓰면 자동으로 이어져요.";
+}
+function renderBuild(){
+  if(!allQ().some(q=>q.id===cur))cur=allQ()[0].id;
+  renderMyBox();renderBuildHead();renderKw();
+  const a=ans(cur);$("tT").value=a.t;$("tE").value=a.e;$("tP").value=a.p;$("full").value=a.full;
+  renderChecks("bChecks",BUILD_CHECKS,a.checks);
+  updateStats();renderList();
+}
+[["tT","t"],["tE","e"],["tP","p"]].forEach(([id,k])=>$(id).addEventListener("input",()=>{
+  const a=ans(cur);a[k]=$(id).value;if(!a.edited){a.full=joined(a);$("full").value=a.full;}
+  save();updateStats();renderListDots();
+}));
+$("full").addEventListener("input",()=>{const a=ans(cur);a.full=$("full").value;a.edited=a.full.trim()!==joined(a).trim();save();updateStats();renderListDots();});
+$("reJoin").onclick=()=>{const a=ans(cur);a.full=joined(a);a.edited=false;$("full").value=a.full;save();updateStats();renderListDots();toast("세 문장으로 다시 이었어요");};
+let dotT=null;function renderListDots(){clearTimeout(dotT);dotT=setTimeout(renderList,400);}
+$("kwAdd").addEventListener("submit",e=>{e.preventDefault();const v=$("kwInput").value.trim();if(!v)return;const a=ans(cur);if(!a.extra.includes(v))a.extra.push(v);if(!a.keys.includes(v))a.keys.push(v);$("kwInput").value="";save();renderKw();});
+$("addQ").addEventListener("submit",e=>{e.preventDefault();const v=$("addQInput").value.trim();if(!v)return;
+  const id="c"+Date.now().toString(36);S.custom.push({id,q:v});$("addQInput").value="";cur=id;save();renderFilters();renderBuild();toast("질문을 추가했어요");});
+$("goMock").onclick=()=>{mode="order";setModeBtns();mockIdx=Math.max(0,mockOrder().indexOf(cur));showTab("mock");};
+
+/* ---------- 모의면접 ---------- */
+let mode="order",mockIdx=0,randOrder=null;
+function mockOrder(){
+  const qs=allQ().map(q=>q.id);
+  if(mode==="written"){const w=qs.filter(id=>status(id)==="done");return w.length?w:qs;}
+  if(mode==="random"){if(!randOrder||randOrder.length!==qs.length){randOrder=qs.slice();for(let i=randOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[randOrder[i],randOrder[j]]=[randOrder[j],randOrder[i]];}}return randOrder;}
+  return qs;
+}
+function setModeBtns(){document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===mode));}
+document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{
+  if(mode==="written"&&b.dataset.mode==="written")return;
+  mode=b.dataset.mode;if(mode==="random")randOrder=null;mockIdx=0;setModeBtns();
+  if(mode==="written"&&!allQ().some(q=>status(q.id)==="done"))toast("아직 완성한 답변이 없어서 전체 질문으로 연습해요");
+  renderMock();
+});
+function mockQ(){const o=mockOrder();mockIdx=Math.min(Math.max(mockIdx,0),o.length-1);return getQ(o[mockIdx]);}
+function renderMock(){
+  stopTimer();stopRec(false);
+  const q=mockQ(),o=mockOrder(),a=ans(q.id);
+  $("mPos").textContent=(mockIdx+1)+" / "+o.length;
+  $("mCat").textContent=(CATS.find(c=>c.id===q.cat)||{}).name;
+  $("mQ").textContent=fill(q.q);
+  setSec(S.mockSec[q.id]||q.sec);
+  renderChecks("mChecks",MOCK_CHECKS,a.mchecks);
+  $("mCount").textContent=a.practiced?"이 질문 연습 "+a.practiced+"회":"";
+  const has=a.full.trim();$("mAns").textContent=has?a.full:"아직 이 질문의 답변을 쓰지 않았어요. 생각 → 경험 → 계획 순서로 바로 말해 보고, '이 답변 고치기'에서 정리해 보세요.";
+  $("mAns").hidden=true;$("mShow").textContent="보기";$("mShow").setAttribute("aria-expanded","false");
+  $("mPrev").disabled=mockIdx===0;
+  showRecording(q.id);
+}
+$("mPrev").onclick=()=>{mockIdx--;renderMock();};
+$("mNext").onclick=()=>{const o=mockOrder();if(mockIdx>=o.length-1){if(mode==="random")randOrder=null;mockIdx=0;toast("한 바퀴 다 돌았어요! 처음부터 다시 시작해요");}else mockIdx++;renderMock();};
+$("mEdit").onclick=()=>{cur=mockQ().id;showTab("build");renderBuild();};
+$("mShow").onclick=()=>{const h=!$("mAns").hidden;$("mAns").hidden=h;$("mShow").textContent=h?"보기":"숨기기";$("mShow").setAttribute("aria-expanded",!h);};
+$("mDone").onclick=()=>{const q=mockQ(),a=ans(q.id);a.practiced=(a.practiced||0)+1;S.practice=(S.practice||0)+1;save();$("mCount").textContent="이 질문 연습 "+a.practiced+"회";renderProgress();toast("연습 기록 완료! 다음엔 한 가지만 고쳐 봐요");};
+
+/* 타이머 */
+let total=90,left=90,tick=null,running=false;
+const C=326.7;
+function fmt(s){const neg=s<0;s=Math.abs(s);return(neg?"+":"")+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
+function drawTimer(){
+  $("tNum").textContent=fmt(left);
+  const over=left<0;$("ring").classList.toggle("over",over);$("tLabel").textContent=over?"초과":"남은 시간";
+  const r=over?1:left/total;$("ringArc").setAttribute("stroke-dashoffset",(C*(1-r)).toFixed(1));
+  $("ringArc").setAttribute("stroke",over?"var(--warn)":left<=10?"var(--warn)":"var(--accent)");
+}
+function setSec(s){total=s;left=s;document.querySelectorAll("[data-sec]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.sec===s));drawTimer();
+  $("tStart").textContent="시작";$("tPause").disabled=true;}
+document.querySelectorAll("[data-sec]").forEach(b=>b.onclick=()=>{stopTimer();stopRec(false);const q=mockQ();S.mockSec[q.id]=+b.dataset.sec;save();setSec(+b.dataset.sec);});
+function startTimer(){if(running)return;running=true;$("tStart").textContent="진행 중";$("tStart").disabled=true;$("tPause").disabled=false;
+  tick=setInterval(()=>{left--;drawTimer();if(left===0)toast("시간이 다 됐어요. 마무리 문장으로 끝내 보세요");},1000);}
+function stopTimer(){clearInterval(tick);running=false;$("tStart").disabled=false;if(left!==total)$("tStart").textContent="계속";$("tPause").disabled=true;}
+$("tStart").onclick=()=>{startTimer();if($("recOn").checked)startRec();};
+$("tPause").onclick=()=>{stopTimer();pauseRec();};
+$("tReset").onclick=()=>{stopTimer();stopRec(false);setSec(total);};
+document.addEventListener("visibilitychange",()=>{if(document.hidden){if(recorder&&recorder.state!=="inactive"){stopTimer();stopRec(false);toast("화면을 벗어나서 녹음을 멈췄어요");}else if(running){stopTimer();}}});
+
+/* 녹음 */
+let recorder=null,chunks=[],stream=null,recQid=null,recLimit=null,recElapsed=0,recStartAt=0;
+const recs={};/* 질문별 최근 녹음 1개 (메모리) */
+const canRec=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+if(!canRec){$("recOn").disabled=true;$("recNote").textContent="이 브라우저나 화면에서는 녹음을 쓸 수 없어요. 휴대폰의 음성 녹음 앱을 함께 켜 두고 연습해 보세요.";}
+$("recOn").onchange=()=>{$("recState").textContent=$("recOn").checked?"켜짐 · 시작을 누르면 녹음돼요":"꺼짐";if(!$("recOn").checked)stopRec(false);};
+async function startRec(){
+  if(!canRec)return;
+  if(recorder&&recorder.state==="paused"){recorder.resume();recStartAt=Date.now();armLimit();$("recState").innerHTML='<span class="recdot"></span>녹음 중';return;}
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+  }catch(e){
+    $("recOn").checked=false;$("recState").textContent="꺼짐";
+    $("recNote").textContent="마이크를 쓸 수 없어요. 브라우저 주소창의 마이크 권한을 허용했는지 확인하거나, 휴대폰 음성 녹음 앱을 함께 사용해 보세요.";return;
+  }
+  chunks=[];recQid=mockQ().id;recElapsed=0;recStartAt=Date.now();
+  recorder=new MediaRecorder(stream);
+  recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+  recorder.onstop=()=>{
+    if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}
+    if(recorder&&recorder._discard){recorder=null;return;}
+    const type=(recorder&&recorder.mimeType)||"audio/webm";
+    const blob=new Blob(chunks,{type});
+    if(recs[recQid])URL.revokeObjectURL(recs[recQid].url);
+    recs[recQid]={blob,url:URL.createObjectURL(blob),type};
+    recorder=null;$("recState").textContent=$("recOn").checked?"켜짐 · 시작을 누르면 녹음돼요":"꺼짐";
+    showRecording(mockQ().id);
+  };
+  recorder.start();armLimit();
+  $("recState").innerHTML='<span class="recdot"></span>녹음 중';
+}
+function armLimit(){clearTimeout(recLimit);recLimit=setTimeout(()=>{stopTimer();stopRec(false);toast("녹음은 최대 3분까지예요");},Math.max(0,180000-recElapsed));}
+function pauseRec(){if(recorder&&recorder.state==="recording"){recorder.pause();recElapsed+=Date.now()-recStartAt;clearTimeout(recLimit);$("recState").textContent="녹음 일시정지";}}
+function stopRec(discard){clearTimeout(recLimit);if(recorder&&recorder.state!=="inactive"){recorder._discard=!!discard;recorder.stop();}}
+function showRecording(qid){
+  const r=recs[qid];$("recOut").hidden=!r;
+  if(r){$("recAudio").src=r.url;}else{$("recAudio").removeAttribute("src");}
+}
+$("recDel").onclick=()=>{const id=mockQ().id;if(recs[id]){URL.revokeObjectURL(recs[id].url);delete recs[id];}showRecording(id);toast("녹음을 지웠어요");};
+$("recSave").onclick=()=>{const id=mockQ().id,r=recs[id];if(!r)return;
+  const ext=r.type.includes("mp4")?"m4a":r.type.includes("ogg")?"ogg":"webm";
+  saveFile("면접연습_"+(mockOrder().indexOf(id)+1)+"번질문."+ext,r.blob);};
+
+/* ---------- 저장/내보내기 ---------- */
+async function saveFile(name,blob){
+  try{
+    if(window.claude&&window.claude.use){const d=await window.claude.use("downloads");if(d){await d.save({filename:name,data:blob});return;}}
+  }catch(e){}
+  try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);toast("파일을 저장했어요");}
+  catch(e){toast("이 화면에서는 파일 저장이 막혀 있어요. 복사 기능을 사용하세요");}
+}
+function exportText(){
+  const lines=["[나의 면접 연습장] 답변 노트"];
+  if(S.profile.school||S.profile.major)lines.push("지원: "+[S.profile.school,S.profile.major].filter(Boolean).join(" "));
+  lines.push("");
+  let n=0;allQ().forEach(q=>{n++;const a=S.answers[q.id];if(!a||!a.full.trim())return;
+    lines.push(n+". "+fill(q.q));if(a.keys.length)lines.push("   키워드: "+a.keys.join(", "));lines.push(a.full.trim());lines.push("");});
+  return lines.join("\n");
+}
+function renderNote(){
+  const box=$("noteList");box.innerHTML="";let n=0,c=0;
+  allQ().forEach(q=>{n++;const a=S.answers[q.id];if(!a||!a.full.trim())return;c++;
+    const d=document.createElement("div");d.className="entry";
+    d.innerHTML=`<h3>${n}. ${esc(fill(q.q))}</h3>${a.keys.length?`<div class="k">키워드 · ${esc(a.keys.join(", "))}</div>`:""}<div class="a">${esc(a.full.trim())}</div>`;
+    const b=document.createElement("button");b.className="btn ghost";b.type="button";b.textContent="고치기";b.style.justifySelf="start";b.onclick=()=>{cur=q.id;showTab("build");renderBuild();};
+    d.appendChild(b);box.appendChild(d);});
+  if(!c)box.innerHTML='<p class="note">아직 완성한 답변이 없어요. \'답변 만들기\'에서 첫 질문부터 시작해 보세요. 20자 이상 쓴 답변이 여기에 모여요.</p>';
+  $("exportText").value=exportText();
+}
+$("exCopy").onclick=()=>{const t=exportText();
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>toast("전체 답변을 복사했어요"),fallbackCopy);}else fallbackCopy();};
+function fallbackCopy(){const d=document.querySelector("#p-note details");d.open=true;const ta=$("exportText");ta.focus();ta.select();
+  try{document.execCommand("copy")?toast("복사했어요"):toast("텍스트가 선택됐어요. 길게 눌러 복사하세요");}catch(e){toast("텍스트가 선택됐어요. 길게 눌러 복사하세요");}}
+$("exTxt").onclick=()=>saveFile("나의_면접_답변노트.txt",new Blob([exportText()],{type:"text/plain;charset=utf-8"}));
+$("resetAll").onclick=()=>{$("resetConfirm").hidden=false;$("resetAll").hidden=true;};
+$("resetNo").onclick=()=>{$("resetConfirm").hidden=true;$("resetAll").hidden=false;};
+$("resetYes").onclick=()=>{S={profile:{school:"",major:""},answers:{},custom:[],day:{},practice:0,mockSec:{},sel:null};try{localStorage.removeItem(KEY);}catch(e){}
+  $("pfSchool").value="";$("pfMajor").value="";cur="q1";$("resetConfirm").hidden=true;$("resetAll").hidden=false;renderFilters();renderBuild();renderNote();renderChecks("dayChecks",DAY_CHECKS,S.day);toast("모든 기록을 지웠어요");};
+
+/* ---------- 시작 ---------- */
+renderChecks("dayChecks",DAY_CHECKS,S.day);
+renderFilters();renderBuild();
+let startTab=S.profile.school?"build":"find";try{startTab=localStorage.getItem(KEY+".tab")||startTab;}catch(e){}
+const hash=(location.hash||"").slice(1);if(tabs.includes(hash))startTab=hash;
+showTab(tabs.includes(startTab)?startTab:"build");
+})();
+</script>
+
+</body>
+</html>
